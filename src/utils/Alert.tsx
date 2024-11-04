@@ -13,7 +13,7 @@ export default function Alert() {
     }
   }, [isAlertValue]);
   return (
-    <div className={`h-9 w-44 ml-auto ${alertStateValue?.color}`}>
+    <div className={`h-18 w-44 ml-auto border rounded-md p-1 ${alertStateValue?.color}`}>
       <span>{alertStateValue?.alertName}</span>
     </div>
   );

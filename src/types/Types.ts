@@ -12,3 +12,5 @@ export interface alertStateInterface {
 export type alertStateType = alertStateInterface | null
 
 export type isAlertType = boolean
+
+export type createCapsuleModalType = boolean
