@@ -14,7 +14,11 @@ export default function LoginPage() {
      try {
       const res = axios.post(`${domain}/api/${apiVersion}/auth/google`, {
         token: response.credential,
-      });
+      },
+      {
+        withCredentials: true,
+      }
+    );
       const result = await res;
       
       if(result.status === 200){

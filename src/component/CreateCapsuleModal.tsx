@@ -1,13 +1,15 @@
-import { useRecoilState } from "recoil";
-import { isCreateCapsuleModalOpen } from "../recoil/Store";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { alertState, isAlert, isCreateCapsuleModalOpen } from "../recoil/Store";
 import { useState } from "react";
-import { API_VERSION, DOMAIN, minCapsulesNameLength } from "../utils/Constant";
+import { API_VERSION, DOMAIN, errorRed, minCapsulesNameLength, successGreen } from "../utils/Constant";
 import axios from "axios";
 
 export default function CreateCapsuleModal() {
   const [isModalOpen, setIsModalOpen] = useRecoilState(
     isCreateCapsuleModalOpen
   );
+  const setIsalert = useSetRecoilState(isAlert)
+  const setAlertState = useSetRecoilState(alertState)
   const [inputState, setInputState] = useState<string>("");
   function hidemodal(e: React.MouseEvent<HTMLDivElement>) {
     const target = (e.target as HTMLDivElement).id;
@@ -17,14 +19,53 @@ export default function CreateCapsuleModal() {
     setInputState(e.target.value);
   }
   async function saveNewCapsule() {
-    if(!inputState || inputState.length <= minCapsulesNameLength) return
-
-    const res = axios.post(`${DOMAIN}/api/${API_VERSION}/capsules`,{
-        capsulesName:inputState
-    })
-    const result = await res;
-    console.log(result);
+    if (!inputState || inputState.length <= minCapsulesNameLength) {
+      
+      setIsalert(true);
+      setAlertState({
+        color:errorRed,
+        alertName:'Capsule name is not persent or capule name less then 2 words',
+        time:4000
+      })
+      return
+    }
     
+   try {
+    const res = await axios.post(
+      `${DOMAIN}/api/${API_VERSION}/capsules`,
+      {
+        capsuleName: inputState,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+    const result = await res;
+    if(result.status === 201){
+      setIsalert(true);
+      setAlertState({
+        color:successGreen,
+        alertName:result.data.message,
+        time:2000
+      })
+    }else{
+      setIsalert(true);
+      setAlertState({
+        color:errorRed,
+        alertName:'Something went wrong please try again',
+        time:2000
+      })
+    }
+   } catch (error) {
+    console.log(error);
+    
+    setIsalert(true);
+      setAlertState({
+        color:errorRed,
+        alertName:'Something went wrong please try again',
+        time:2000
+      })
+   }
   }
   return (
     isModalOpen && (

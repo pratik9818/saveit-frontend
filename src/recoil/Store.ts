@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { alertStateType, createCapsuleModalType, isAlertType } from "../types/Types";
+import { alertStateType, capsuleType, createCapsuleModalType, isAlertType } from "../types/Types";
 
 export const isAlert = atom<isAlertType>({
     key:'alert',
@@ -12,5 +12,9 @@ export const alertState = atom<alertStateType>({
 export const isCreateCapsuleModalOpen = atom<createCapsuleModalType>({
     key:'create capsules modal',
     default:false
+})
+export const capsulesStore = atom<capsuleType[]>({
+    key:'capsule store',
+    default:[]
 })
 
