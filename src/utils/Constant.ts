@@ -3,4 +3,3 @@ export const API_VERSION = 'v1'
 export const DOMAIN = 'http://localhost:3000'
 export const successGreen = 'bg-lime-500'
 export const errorRed = 'bg-red-500'
-export const minCapsulesNameLength = 2

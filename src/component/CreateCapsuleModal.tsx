@@ -1,7 +1,7 @@
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { alertState, isAlert, isCreateCapsuleModalOpen } from "../recoil/Store";
+import { alertState, capsulesStore, isAlert, isCreateCapsuleModalOpen } from "../recoil/Store";
 import { useState } from "react";
-import { API_VERSION, DOMAIN, errorRed, minCapsulesNameLength, successGreen } from "../utils/Constant";
+import { API_VERSION, DOMAIN, errorRed, successGreen } from "../utils/Constant";
 import axios from "axios";
 
 export default function CreateCapsuleModal() {
@@ -11,6 +11,7 @@ export default function CreateCapsuleModal() {
   const setIsalert = useSetRecoilState(isAlert)
   const setAlertState = useSetRecoilState(alertState)
   const [inputState, setInputState] = useState<string>("");
+  const [capsulesState,setCapsulesState] = useRecoilState(capsulesStore)
   function hidemodal(e: React.MouseEvent<HTMLDivElement>) {
     const target = (e.target as HTMLDivElement).id;
     if (target === "modal") setIsModalOpen(false);
@@ -19,12 +20,12 @@ export default function CreateCapsuleModal() {
     setInputState(e.target.value);
   }
   async function saveNewCapsule() {
-    if (!inputState || inputState.length <= minCapsulesNameLength) {
+    if (!inputState.length) {
       
       setIsalert(true);
       setAlertState({
         color:errorRed,
-        alertName:'Capsule name is not persent or capule name less then 2 words',
+        alertName:'Please type capsule name',
         time:4000
       })
       return
@@ -41,7 +42,20 @@ export default function CreateCapsuleModal() {
       }
     );
     const result = await res;
+    
     if(result.status === 201){
+      const newcapsule = {
+        capsule_id:result.data.capsule_id,
+        user_id:'null', //it should not here that is in client side ----ALERT
+        capsule_name:inputState,
+        capsule_size:0,
+        created_at:new Date(), //it is not coming in utc 
+        updated_at:new Date().toUTCString(),
+        is_deleted:false
+      }
+      setCapsulesState([newcapsule,...capsulesState])
+      setIsModalOpen(false)
+      setInputState("")
       setIsalert(true);
       setAlertState({
         color:successGreen,

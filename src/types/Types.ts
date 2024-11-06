@@ -17,11 +17,15 @@ export type createCapsuleModalType = boolean
 
 export interface capsuleType {
     capsule_id:string,
-    user_id:string,
+    user_id:string, //it should not here that is in client side ----ALERT
     capsule_name:string,
     capsule_size:number,
     created_at:Date,
-    updated_at:string,
+    updated_at:string | null,
     is_deleted:boolean
 }
 
+// export interface capsuleActionsType{
+    
+// }
+export type CapsuleActionModalOpenType = string | null
