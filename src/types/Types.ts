@@ -21,7 +21,7 @@ export interface capsuleType {
     capsule_name:string,
     capsule_size:number,
     created_at:Date,
-    updated_at:string | null,
+    updated_at:string | null | Date ,
     is_deleted:boolean
 }
 
@@ -29,3 +29,10 @@ export interface capsuleType {
     
 // }
 export type CapsuleActionModalOpenType = string | null
+export type isCapsulesFilterModalType = boolean
+
+export interface capsuleFilterStateInterface {
+    filterType : string | null,
+    order:string | null
+}
+export type capsuleFilterStateType = null | capsuleFilterStateInterface

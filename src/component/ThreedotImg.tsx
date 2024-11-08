@@ -1,10 +1,10 @@
-import { useSetRecoilState } from "recoil"
+import { useRecoilState } from "recoil"
 import { capsuleActionModalId } from "../recoil/Store"
 
 export default function ThreedotImg({capsuleid}:{capsuleid:string}) {
-  const setCapsuleActionModalId = useSetRecoilState(capsuleActionModalId)
+  const [capsuleActionModalIdvalue ,setCapsuleActionModalId] = useRecoilState(capsuleActionModalId)
   function showAction(){
-    setCapsuleActionModalId(capsuleid)
+    setCapsuleActionModalId(capsuleActionModalIdvalue === capsuleid ? null : capsuleid);
   }
-  return <div onClick={showAction}>. . .</div>
+  return <div className="cursor-pointer" onClick={showAction}>. . .</div>
 }
