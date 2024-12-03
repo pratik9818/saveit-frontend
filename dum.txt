@@ -1,0 +1,203 @@
+import axios from "axios";
+import { useEffect, useRef, useState } from "react";
+import { API_VERSION, DOMAIN } from "../utils/Constant";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { capsuleFilterState, capsulesStore } from "../recoil/Store";
+import ThreedotImg from "../component/ThreedotImg";
+import CapsuleName from "../component/CapsuleName";
+import CapsuleActionModal from "../component/CapsuleActionModal";
+
+export default function Capsules() {
+  const [capsulesState, setCapsulesState] = useRecoilState(capsulesStore);
+  const [isTriggerFetch , setTriggerFetch] = useState<boolean>(false)
+  const scrollHeight = useRef<HTMLDivElement | null>(null)
+  const capuleFilterValue = useRecoilValue(capsuleFilterState)
+  useEffect(() => {
+    setCapsulesState([])
+    if(capuleFilterValue?.filterType == 'default'){
+    const dateModified = new Date().toUTCString();
+    const endpath = `capsules?dateModified=${dateModified}` 
+    fetchCapsules(endpath);
+    }
+    else if(capuleFilterValue?.filterType == 'createdAt'){
+      let dateCreated : Date | string = ''
+      const order = capuleFilterValue.order
+      if(order == 'asc') dateCreated = new Date('2024-01-05 01:02:18.929832').toUTCString();
+      else dateCreated = dateCreated = new Date().toUTCString();
+    console.log(dateCreated);
+    
+      const endpath = `capsules/filter/date?date=${dateCreated}&order=${order}` 
+      fetchCapsules(endpath);
+    }
+    else if(capuleFilterValue?.filterType == 'size'){
+      let size = 0
+      const order = capuleFilterValue.order
+      if(order == 'asc') size = 0
+      else size = 5000000
+      const endpath = `capsules/filter/size?size=${size}&order=${order}` 
+      fetchCapsules(endpath);
+    }
+  }, [capuleFilterValue]);
+ 
+  useEffect(() => {
+    if(isTriggerFetch){
+      if(capuleFilterValue?.filterType == 'default'){
+        const lastFetchCapsule = capsulesState[capsulesState.length-1]
+        const dateModified= lastFetchCapsule.updated_at
+        const endpath = `capsules?dateModified=${dateModified}` 
+        fetchCapsules(endpath);
+      }
+      // else if(capuleFilterValue?.filterType == 'createdAt'){
+      //   const lastFetchCapsule = capsulesState[capsulesState.length-1]
+        
+      //   const dateCreated= lastFetchCapsule.created_at
+      //   console.log(dateCreated);
+        
+      //   const order = capuleFilterValue.order
+      //   const endpath = `capsules/filter/date?date=${dateCreated}&order=${order}` 
+      //   fetchCapsules(endpath); 
+      // }
+      // else if(capuleFilterValue?.filterType == 'size'){
+      //   const lastFetchCapsule = capsulesState[capsulesState.length-1]
+      //   const size= lastFetchCapsule.capsule_size
+      //   const order = capuleFilterValue.order
+      //   const endpath = `capsules/filter/size?size=${size}&order=${order}` 
+      //   fetchCapsules(endpath);
+      // }
+    }
+  }, [isTriggerFetch]);
+  console.log(capsulesState);
+
+ async function fetchCapsules(endpath:string) {
+    try {
+      const res = await axios(
+        `${DOMAIN}/api/${API_VERSION}/${endpath}`,
+        {
+          withCredentials: true,
+        }
+      );
+      const {data:{data}} = await res;
+      if (data) {
+        setCapsulesState(prv => [...prv , ...data]);
+        // setCapsulesState(result.data.data);
+        setTriggerFetch(false)
+      }
+    } catch (error) {
+      // setTriggerFetch(false)
+      // if(error?.data?.message === 'data is not persent') //////IMPORTANT - handle it perpory might be buf if not resolve yet
+      console.log(error);
+      
+    }
+  }
+  function triggerfetch(){
+        if(scrollHeight.current){
+          const divScrollHeight = scrollHeight.current.scrollTop;
+          const divHeight = scrollHeight.current.offsetHeight + 2.3;
+          // console.log(divScrollHeight,'divScrollHeight');
+          // console.log(divHeight,'divHeight');
+          
+          if(divHeight < divScrollHeight && !isTriggerFetch){
+            setTriggerFetch(true)
+          }
+          
+        }
+  }
+  return (
+    <div ref={scrollHeight} className="border-4 border-white h-[70vh] flex flex-wrap justify-center overflow-y-scroll" onScroll={triggerfetch}>
+      {capsulesState &&
+        capsulesState.map((element) => {
+          return (
+            <div
+              key={element.capsule_id}
+              className="border-2 w-[50%] h-154 m-2 flex justify-between flex-col"
+            >
+              <ThreedotImg capsuleid={element.capsule_id} />
+              <CapsuleActionModal capsuleid={element.capsule_id} />
+              <CapsuleName
+                name={element.capsule_name}
+                capsuleid={element.capsule_id}
+              />
+            </div>
+          );
+        })}
+    </div>
+  );
+}
+import { useRecoilState } from "recoil"
+import { capsuleFilterState } from "../recoil/Store"
+import { useEffect } from "react"
+
+export default function CapsuleFilterCreatedat() {
+  const [capsuleFilterStateValue,setCapsuleFilterState] = useRecoilState(capsuleFilterState)
+  useEffect(()=>{
+      //need to remove render on click without state change
+  },[])
+  function setFilter(){
+    if(capsuleFilterStateValue.filterType == 'createdAt'){
+      setCapsuleFilterState({
+        filterType:'default',
+        order:null
+      })
+      return
+    }
+    setCapsuleFilterState({
+      filterType:'createdAt',
+      order:'asc'
+    })
+  }
+  function changeOrderAsc(){
+    setCapsuleFilterState({
+      filterType:'createdAt',
+      order:'asc'
+    })
+  }
+  function changeOrderDesc(){
+    setCapsuleFilterState({
+      filterType:'createdAt',
+      order:'desc'
+    })
+  }
+  return (
+    <div>
+      <button onClick={setFilter}>Created at</button>
+      <div>
+        <button onClick={changeOrderAsc}>Asc</button>
+        <button onClick={changeOrderDesc}>Dec</button>
+      </div>
+    </div>
+  )
+}
+
+export const capsuleFilterState = atom<capsuleFilterStateType>({
+    key:'capsules filter state',
+    default:{
+        filterType:'default',
+        order:null
+    }
+})
+export const capsuleFilterState = atom<capsuleFilterStateType>({
+    key:'capsules filter state',
+    default:{
+        filterType:'default',
+        order:null
+    }
+})
+
+export interface capsuleFilterStateType {
+    filterType : string,
+    order:string | null
+}
+import {useRecoilValue } from "recoil"
+import { isCapsulesFilterModalOpen } from "../recoil/Store"
+import CapsuleFilterCreatedat from "./CapsuleFilterCreatedat"
+import CapsuleFilterSize from "./CapsuleFilterSize"
+
+export default function CapsuleFilterModal() {
+    const isCapsulesFilterModalOpenValue = useRecoilValue(isCapsulesFilterModalOpen)
+  return isCapsulesFilterModalOpenValue && (
+    <div className='border bg-white absolute w-40 right-0'>
+      <CapsuleFilterCreatedat/>
+      <CapsuleFilterSize/>
+    </div>
+  )
+}
