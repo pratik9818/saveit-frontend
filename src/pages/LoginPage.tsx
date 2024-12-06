@@ -17,7 +17,6 @@ export default function LoginPage() {
   const setUserLogin = useSetRecoilState(userLogin)
   const [isLoading , setIsLoading] = useState<boolean>(false)
   const navigate = useNavigate()
-
   const handleGoogleSuccess = async (response: CredentialResponse) => {
     if (response.credential) {
       setIsLoading(true)
@@ -29,7 +28,7 @@ export default function LoginPage() {
         );
         if (status === 200 || status === 201) {
           setUserLogin(true)
-          navigate('/app/capsules')
+          navigate('/')
           AlertFunction(true, successGreen, message, 4000);
           setIsLoading(false)
         }

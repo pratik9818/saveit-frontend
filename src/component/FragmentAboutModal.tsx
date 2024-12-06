@@ -5,6 +5,7 @@ import { API_VERSION, DOMAIN, errorRed, successGreen } from "../utils/Constant";
 import axios from "axios";
 import useAlertFunction from "../hooks/AlertFunction";
 import { useState } from "react";
+import downloadFile from "../utils/DownloadFiles";
 
 interface fragmentActionProps {
     fragmentdetails: fragmentType;
@@ -55,11 +56,54 @@ export default function FragmentAboutModal({fragmentdetails}:fragmentActionProps
       
     }
   }
+
+  async function checkDownloadCount(){
+    try {
+        const resp = await axios(`${DOMAIN}/api/${API_VERSION}/fragments/files/download?fragmentId=${fragmentdetails.fragment_id}`,{
+          withCredentials: true,
+        })
+        console.log(resp);
+        if(fragmentdetails.url && fragmentdetails.file_name)downloadFile(fragmentdetails?.url, fragmentdetails?.file_name,AlertFunction);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const { status, response, message } = error;
+
+        if (status == 500) {
+          // setUserLogin(true)
+          AlertFunction(
+            true,
+            errorRed,
+            "Something went wrong ! please try again",
+            4000
+          );
+          return;
+        } else if (message == "Network Error") {
+          AlertFunction(true, errorRed, "No Internet", 4000);
+          return;
+        }
+        AlertFunction(true, errorRed, response?.data?.message, 4000);
+      }
+    }
+  }
+
+    function handleDownload(){
+
+    // Example logic to handle different types
+    if (fragmentdetails?.url && fragmentdetails?.url.startsWith('http')) {
+      // Download remote file (image, video, PDF, etc.)
+      checkDownloadCount()
+    } else {
+      // Download generated text or blob
+      const textContent = fragmentdetails.text_content;
+      if(textContent) downloadFile(textContent, 'fragment.txt',AlertFunction);
+    }
+};
+
   return (
    <div className="absolute shadow-sm border -left-[180px] w-42 h-auto text-sm p-2 bg-gray-100">
     <div className="m-1">Size : {fragmentdetails.size} Mb</div>
     <div className="m-1">Created : {new Date(fragmentdetails.created_at).toDateString()}</div>
-    {/* <button className="m-1">{fragmentdetails.fragment_type != 'text' ? 'Download':''}</button> */}
+    <button className="m-1" onClick={handleDownload}> Download</button>
     <div className="m-1">{fragmentdetails.updated_at && fragmentdetails.fragment_type == 'text' ? 'Modified :' + new Date(fragmentdetails.updated_at).toDateString():''}</div>
    <button className="bg-red-500 p-[4px] rounded-sm" onClick={deleteFragment}>{isDelete ? 'Deleting':'Delete'}</button>
    </div>
