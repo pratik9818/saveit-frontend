@@ -97,7 +97,7 @@ export default function FragmentAction({
   function saveTag(e: React.KeyboardEvent<HTMLInputElement>) {
     const key = e.key;
     if (key == "Enter") {
-      e.preventDefault();
+      // e.preventDefault();
       saveTagInDb();
     }
   }

@@ -55,7 +55,7 @@ export default function CapsuleDelete() {
     }
   }
   return (
-    <button className="bg-gray-300 p-[4px] rounded-sm w-[90%] absolute top-8" onClick={deletecapsule}>
+    <button className="bg-gray-300 p-[4px] rounded-sm w-[90%] absolute top-0" onClick={deletecapsule}>
       {!loading ? "Delete" : "Deleting.."}
     </button>
   );

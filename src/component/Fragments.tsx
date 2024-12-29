@@ -102,7 +102,7 @@ export default function Fragments() {
     <Loader width={40} height={40} top={'50vh'} left={'50vw'}/>
   ) : (
     <div
-      className="h-[80%] border overflow-y-scroll relative top-10 flex flex-col-reverse  mt-2"
+      className="h-[80%] border overflow-y-scroll relative top-10 flex flex-col-reverse mt-2"
       ref={scrollHeight}
       onScroll={triggerfetch}
     >

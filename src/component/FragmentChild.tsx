@@ -31,7 +31,7 @@ export default function FragmentChild({ fragmentdetails,clientwidth }: fragmentC
     } else if (fragmentdetails.fragment_type == "video") {
       return <video controls className="w-[100%] h-[100%]" src={fragmentdetails?.url || ''}></video>;
     } else if (fragmentdetails.fragment_type == "image") {
-      return <img className="w-[100%] h-[100%]" src={fragmentdetails?.url || ''} />;
+      return <img className="w-[100%] h-[100%] object-contain" src={fragmentdetails?.url || ''} />;
     } else {
       return <div className="flex mt-6">{<icons.FileIcon/>} {fragmentdetails.file_name?.substring(0,150)}</div>
     }

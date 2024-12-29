@@ -35,6 +35,7 @@ export default function Capsules() {
     }
   }, [isTriggerFetch]);
 
+  
   async function fetchCapsules(dateModified: string | null | Date) {
     try {
       const {
@@ -133,6 +134,8 @@ export default function Capsules() {
     e.stopPropagation();
     navigate(`/app/fragment/${capsuleid}`);
   }
+
+
   return (
     <div
       ref={scrollHeight}

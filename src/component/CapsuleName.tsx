@@ -30,10 +30,13 @@ export default function CapsuleName({
     e.stopPropagation()
     setChangeName(e.target.value);
   }
-  async function updateCapsuleName(e: React.KeyboardEvent<HTMLInputElement>) {
-   
-    try {
+  async function updateCapsuleNameOnEnter(e: React.KeyboardEvent<HTMLInputElement>) {
       if (e.key == "Enter") {
+        updateCapsuleName()
+      }
+  }
+  async function updateCapsuleName(){
+    try {
         if(!changeName.length){
             setIsalert(true);
             setAlertState({
@@ -43,6 +46,7 @@ export default function CapsuleName({
             })
             return
         }
+        
         if(name == changeName) {
             setChangeNode(false);
             return
@@ -67,7 +71,7 @@ export default function CapsuleName({
             setChangeNode(false)
             AlertFunction(true,successGreen,message,3000)
         }
-      }
+      
     } catch (error) {
       if(axios.isAxiosError(error)){
         const {status,response,message} = error
@@ -83,6 +87,24 @@ export default function CapsuleName({
        }
     }
   }
+  // useEffect(() => {
+  //   document.addEventListener("click", handleOutsideClick);
+
+  //   return () => {
+  //     document.removeEventListener("click", handleOutsideClick);
+  //   };
+  // }, []);
+  // function handleOutsideClick(event: MouseEvent) {
+  //   const target = (event.target as HTMLDivElement).id;
+  //   console.log(isChangeNode);
+    
+  //   if (target != 'namediv') {
+  //     // setChangeNode(false); // Close modal if clicked outside
+  //     // console.log('k');
+      
+  //     updateCapsuleName()
+  //   }
+  // }
   return isChangeNode ? (
     <input
     className="outline-none border px-1 w-[100%]"
@@ -90,10 +112,10 @@ export default function CapsuleName({
       type="text"
       value={changeName}
       onChange={(e) => changeCapsuleName(e)}
-      onKeyDown={(e) => updateCapsuleName(e)}
+      onKeyDown={(e) => updateCapsuleNameOnEnter(e)}
     />
   ) : (
-    <div onClick={changeNode}>
+    <div onClick={changeNode} id="namediv">
       {changeName.substring(0,30)}
     </div>
   );
