@@ -82,3 +82,8 @@ export const feedbackModal = atom<boolean>({
     default:false
 })
 
+export const screenShot = atom<null | File>({
+    key:'screen shot',
+    default:null
+})
+
