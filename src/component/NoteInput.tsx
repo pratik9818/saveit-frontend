@@ -99,7 +99,7 @@ export default function NoteInput({ textareaHeight ,postion='flex-row'}: textare
       onKeyDown={(e) => saveNote(e)}
       onChange={(e) => writeNote(e)}
       style={{ height:textareaHeight }}
-      className="w-[100%] p-2 mx-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+      className="w-[100%] p-2 mx-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none z-20"
     ></textarea>
     <SaveFragment loading={isLoading}/>
   </div>

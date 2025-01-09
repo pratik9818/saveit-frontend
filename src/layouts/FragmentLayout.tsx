@@ -2,14 +2,19 @@ import {useParams } from "react-router-dom"
 import FragmentSearch from "../component/FragmentSearch"
 import FragmentUpload from "../component/FragmentUpload"
 import { useSetRecoilState } from "recoil"
-import { activeCapsule, screenShot } from "../recoil/Store"
+import { activeCapsule, screenShot, selectedFragment } from "../recoil/Store"
 import Fragments from "../component/Fragments"
 import EditTextModal from "../component/EditTextModal"
 import ExpandNoteModal from "../component/ExpandNoteModal"
 import { useEffect } from "react"
+import FragmentSelectModal from "../component/FragmentSelectModal"
 
 export default function FragmentLayout() {
-    const {capsuleid} = useParams()
+  const {capsuleid} = useParams()
+  const setSelectedFragment = useSetRecoilState(selectedFragment);
+  useEffect(()=>{
+    setSelectedFragment([])
+  },[])
     const setActiveCapsule = useSetRecoilState(activeCapsule)
     const setScreenShot = useSetRecoilState(screenShot)
     if(capsuleid) setActiveCapsule(capsuleid)
@@ -38,6 +43,7 @@ export default function FragmentLayout() {
   return (
     <div className="h-[99vh] flex justify-between flex-col">
      <FragmentSearch/>
+     <FragmentSelectModal/>
      <Fragments/>
      <FragmentUpload/>
      {<EditTextModal/>}

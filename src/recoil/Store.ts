@@ -87,3 +87,8 @@ export const screenShot = atom<null | File>({
     default:null
 })
 
+export const selectedFragment = atom<fragmentType[]>({
+    key:'selected fragment',
+    default:[]
+})
+
