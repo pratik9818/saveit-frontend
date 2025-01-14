@@ -19,17 +19,49 @@ useEffect(() => {
     upload(screenShotfile)
   }
 }, [screenShotfile])
-  async function upload(file: File) {
-    setStartUploading(true);
-    if (!file) {
-      AlertFunction(true, errorRed, "No file selected", 4000);
-      setStartUploading(false);
-      return;
-    }
-    getPresignedUrl(file);
+async function upload(file: File) {
+  setStartUploading(true);
+  if (!file) {
+    AlertFunction(true, errorRed, "No file selected", 4000);
+    setStartUploading(false);
+    return;
   }
 
-  async function getPresignedUrl(file: File) {
+  // Create base64 URL
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  
+  reader.onload = () => {
+    const base64Url = reader.result as string;
+    const { name, type } = file;
+    let fileType = type.split("/")[0];
+    if (fileType === "image") fileType = "image";
+    else if (fileType === "video") fileType = "video";
+    else fileType = type;
+    const tempId = `temp-${Date.now()}`;
+    const newTextFragment = {
+      fragment_id: tempId,
+      capsule_id: activeCapsuleValue,
+      size: null,
+      fragment_type: fileType,
+      tag: "",
+      reminder: false,
+      download_count: 0,
+      url: base64Url, // Set the base64 URL here
+      text_content: null,
+      file_name: name,
+      created_at: new Date().toUTCString(),
+      updated_at: null,
+      is_deleted: false,
+    };
+
+    setFragmentStore([newTextFragment, ...fragmentStoreState]);
+    getPresignedUrl(file, tempId);
+  };
+}
+
+
+  async function getPresignedUrl(file: File,tempId?:string) {
     const { name, size } = file;
     try {
       const { data: { url }, status } = await axios.put(
@@ -44,42 +76,42 @@ useEffect(() => {
         }
       );
       if (status === 200) {
-        uploadOnS3(url, file);
+        uploadOnS3(url, file,tempId);
       }
     } catch (error) {
       setStartUploading(false);
-      handleAxiosError(error);
+      handleAxiosError(error,tempId);
     }
   }
 
-  async function uploadOnS3(presignedUrl: string, file: File) {
+  async function uploadOnS3(presignedUrl: string, file: File,tempId?:string) {
     try {
       const { status } = await axios.put(presignedUrl, file, {
         headers: { "Content-Type": "application/octet-stream" },
       });
       if (status === 200) {
-        saveInDb(file);
+        saveInDb(file,tempId);
         setStartUploading(false);
       }
     } catch (error) {
       setStartUploading(false);
-      handleAxiosError(error);
+      handleAxiosError(error,tempId);
     }
   }
 
-  async function saveInDb(file: File) {
-    const { name, size, type } = file;
+  async function saveInDb(file: File,tempId?:string) {
+    const { name, size:fileSize, type } = file;
     let fileType = type.split("/")[0];
     if (fileType === "image") fileType = "image";
     else if (fileType === "video") fileType = "video";
     else fileType = type;
 
     try {
-      const { data: { data, message }, status } = await axios.post(
+      const { data: { data:{fragment_id,size,url}, message }, status } = await axios.post(
         `${DOMAIN}/api/${API_VERSION}/fragments/files`,
         {
           capsuleId: activeCapsuleValue,
-          size: size,
+          size: fileSize,
           tag: "",
           fileType: fileType,
           fileName: name,
@@ -89,30 +121,24 @@ useEffect(() => {
         }
       );
       if (status === 201) {
-        const newTextFragment = {
-          fragment_id: data.fragment_id,
-          capsule_id: activeCapsuleValue,
-          size: data.size,
-          fragment_type: fileType,
-          tag: "",
-          reminder: false,
-          download_count: 0,
-          url: data.url,
-          text_content: null,
-          file_name: name,
-          created_at: new Date().toUTCString(),
-          updated_at: null,
-          is_deleted: false,
-        };
-        setFragmentStore([newTextFragment, ...fragmentStoreState]);
+        setFragmentStore(prevStore => 
+          prevStore.map(fragment => 
+            fragment.fragment_id === tempId 
+              ? {...fragment, fragment_id, size,url}
+              : fragment
+          )
+        );
         AlertFunction(true, successGreen, message, 4000);
       }
     } catch (error) {
-      handleAxiosError(error);
+      handleAxiosError(error,tempId);
     }
   }
 
-  function handleAxiosError(error: unknown){
+  function handleAxiosError(error: unknown,tempId?:string) {
+    setFragmentStore(prevStore => 
+      prevStore.filter(fragment => fragment.fragment_id !== tempId)
+    );
     if (axios.isAxiosError(error)) {
       const { status, response, message } = error;
       if (status === 500) {

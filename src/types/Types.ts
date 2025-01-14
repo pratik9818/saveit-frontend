@@ -42,7 +42,7 @@ export type fragmentSearchValueType = string | null
 export interface fragmentType {
     fragment_id:string,
     capsule_id:string | null,
-    size:number, //it should not here that is in client side ----ALERT
+    size:number | null, //it should not here that is in client side ----ALERT
     fragment_type:string,
     tag:string,
     reminder:boolean,

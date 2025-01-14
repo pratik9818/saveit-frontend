@@ -14,8 +14,8 @@ export default function EditFragmentText() {
   const [fragmentStoreState, setFragmentStore] = useRecoilState(fragmentStore);
   const textArea = useRef<HTMLTextAreaElement | null>(null);
   const activeCapsuleId = useRecoilValue(activeCapsule);
-  const AlertFunction = useAlertFunction()
-  const [updateing ,setUpdateing] = useState<boolean>(false)
+  const AlertFunction = useAlertFunction();
+  const [updateing, setUpdateing] = useState<boolean>(false);
   const activeEditFragmentTextId = useRecoilValue(activeFrgamentText);
   const findFragmentDetail = fragmentStoreState.find(
     (fragment) => fragment.fragment_id == activeEditFragmentTextId
@@ -23,7 +23,7 @@ export default function EditFragmentText() {
   const keySet = ["Shift", "Enter"];
   let storeEnterKey: string[] = [];
   const [textValue, setTextValue] = useState<string>(
-    findFragmentDetail?.text_content || ''
+    findFragmentDetail?.text_content || ""
   );
   useEffect(() => {
     if (textArea.current) {
@@ -37,15 +37,21 @@ export default function EditFragmentText() {
   }
   async function saveText(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     const key = e.key;
+
     storeEnterKey.push(key);
     if (keySet[0] != storeEnterKey[0] && key == "Enter") {
-      e.preventDefault()
+      e.preventDefault();
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      if (isMobile) {
+        return;
+      }
       saveInDb();
     }
   }
   async function saveInDb() {
-    if(!textValue.length) return  AlertFunction(true, errorRed, 'Plese type something first', 3000);
-    setUpdateing(true)
+    if (!textValue.length)
+      return AlertFunction(true, errorRed, "Plese type something first", 3000);
+    setUpdateing(true);
     storeEnterKey = [];
     try {
       const {
@@ -75,13 +81,13 @@ export default function EditFragmentText() {
           )
         );
         // setActiveEditFragmentTextId(null);
-        setUpdateing(false)
+        setUpdateing(false);
         AlertFunction(true, successGreen, message, 3000);
       }
     } catch (error) {
-      setUpdateing(false)
+      setUpdateing(false);
       if (axios.isAxiosError(error)) {
-        const { status, response ,message} = error;
+        const { status, response, message } = error;
         if (status == 500) {
           AlertFunction(
             true,
@@ -90,9 +96,9 @@ export default function EditFragmentText() {
             3000
           );
           return;
-        }else if(message == 'Network Error'){
-          AlertFunction(true, errorRed, 'No Internet', 4000);
-          return
+        } else if (message == "Network Error") {
+          AlertFunction(true, errorRed, "No Internet", 4000);
+          return;
         }
         AlertFunction(true, errorRed, response?.data?.message, 4000);
       }
@@ -110,7 +116,16 @@ export default function EditFragmentText() {
         onChange={editText}
         className="w-[100%] h-[80%] p-2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
       ></textarea>
-      <button className="border w-24 h-10 p-2 rounded-md my-2 bg-blue-500 relative" onClick={saveTextOnClick}>{updateing ? <Loader width={20} height={20} top={'8px'} left={'38px'}/> :'update'}</button>
+      <button
+        className="border w-24 h-10 p-2 rounded-md my-2 bg-blue-500 relative"
+        onClick={saveTextOnClick}
+      >
+        {updateing ? (
+          <Loader width={20} height={20} top={"8px"} left={"38px"} />
+        ) : (
+          "update"
+        )}
+      </button>
     </div>
   );
 }

@@ -18,7 +18,7 @@ export const capsuleFiltersStore = {
 export const fragmentDimensionAbove700px = [
   {
     fragmentType: "image",
-    width: "350px",
+    width: "500px",
     height: "350px",
   },
   {

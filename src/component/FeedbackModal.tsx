@@ -30,6 +30,9 @@ export default function FeedbackModal() {
     }
 
     async function sendForm() {
+     const isFormFilled = formData.bugs || formData.features || formData.suggestions || formData.improvements
+      if(!isFormFilled) return AlertFunction(true, errorRed, "Please fill one of the field", 4000);
+      
         try {
           const {
             data: { message },

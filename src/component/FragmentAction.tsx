@@ -112,6 +112,7 @@ export default function FragmentAction({
       placeholder="tag"
       ref={tagInput}
       type="text"
+      enterKeyHint="done"
       value={tagValue}
       onChange={editTagValue}
       onKeyDown={(e) => saveTag(e)}
