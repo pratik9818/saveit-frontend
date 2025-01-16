@@ -12,7 +12,7 @@ export default function FileUpload() {
   const [fragmentStoreState, setFragmentStore] = useRecoilState(fragmentStore);
   const [startUploading, setStartUploading] = useState<boolean>(false);
   const [dragActive, setDragActive] = useState<boolean>(false);
-const screenShotfile = useRecoilValue(screenShot);
+const [screenShotfile, setScreenShot] = useRecoilState(screenShot);
 
 useEffect(() => {
     if(screenShotfile){
@@ -128,7 +128,11 @@ async function upload(file: File) {
               : fragment
           )
         );
+        
         AlertFunction(true, successGreen, message, 4000);
+        if(screenShotfile){
+          setScreenShot(null);
+        }
       }
     } catch (error) {
       handleAxiosError(error,tempId);
