@@ -10,7 +10,7 @@ interface LoaderProps {
 const Loader: React.FC<LoaderProps> = ({ width , height,top,left}) => {
   return (
     <div
-      className={`border-4 border-gray-500 border-t-transparent rounded-full animate-spin absolute `}
+      className={`border-4 border-black border-t-transparent rounded-full animate-spin absolute `}
       style={{
         width: `${width}px`,
         height: `${height}px`,

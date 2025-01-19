@@ -116,10 +116,10 @@ export default function FragmentAction({
       value={tagValue}
       onChange={editTagValue}
       onKeyDown={(e) => saveTag(e)}
-      className="w-[100%] absolute -bottom-6 bg-gray-200 shadow-md rounded-sm p-1 right-0 outline-none"
+      className="w-[100%] absolute -bottom-6 bg-gray-100 shadow-md rounded-sm p-1 right-0 outline-none"
     />
   ) : (
-    <div className="flex w-[100%] absolute -bottom-6 bg-gray-200 shadow-md rounded-sm p-1 right-0">
+    <div className="flex w-[100%] absolute -bottom-6 bg-gray-100 shadow-md rounded-sm p-1 right-0">
       <button onClick={showFragmentAbout}>
         <icons.AboutIcon />
       </button>

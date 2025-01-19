@@ -28,7 +28,11 @@ export default function FragmentLayout() {
           if (item.type.startsWith("image/")) {
             const file = item.getAsFile();
             if (file) {
-              setScreenShot(file);
+              const timestamp = Date.now();
+              const newFile = new File([file], `screenshot_${timestamp}.${file.name.split('.').pop()}`, {
+                type: file.type,
+              });
+              setScreenShot(newFile);
             }
           }
         }
@@ -41,7 +45,7 @@ export default function FragmentLayout() {
     };
   }, []);
   return (
-    <div className="h-[99vh] flex justify-between flex-col">
+    <div className={`h-[99vh] flex justify-between flex-col bg-gray-100`}>
      <FragmentSearch/>
      <FragmentSelectModal/>
      <Fragments/>

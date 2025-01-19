@@ -1,7 +1,7 @@
 import { useRecoilState } from "recoil";
 import { capsulesStore, isCreateCapsuleModalOpen } from "../recoil/Store";
 import { useState } from "react";
-import { API_VERSION, DOMAIN, errorRed, successGreen } from "../utils/Constant";
+import { API_VERSION, buttonBg, DOMAIN, errorRed, successGreen } from "../utils/Constant";
 import axios from "axios";
 import useAlertFunction from "../hooks/AlertFunction";
 import Loader from "./Loader";
@@ -77,14 +77,18 @@ export default function CreateCapsuleModal() {
         onClick={(e) => hidemodal(e)}
         id="modal"
       >
-        <div className="flex justify-between ">
+        <div className="flex border h-[180px] bg-white items-center px-6 rounded-lg flex-col">
+          <h1 className="font-bold text-xl mt-3">Create New Capsule</h1>
+          <div className="flex items-center mt-9">
           <input
             type="text"
-            className="w-full md:max-w-[400px] p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full md:max-w-[400px] p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 h-9"
             onChange={(e) => inputValueChange(e)}
             value={inputState}
+            placeholder="Enter capsule name"
           />
-          <button onClick={saveNewCapsule} className=" bg-blue-500 relative text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition duration-300 ml-3 w-24">{isLoading ? <Loader width={20} height={20} top={'9px'} left={'28px'}/>:'Add'}</button>
+          <button onClick={saveNewCapsule} className= {`relative text-white px-4 rounded-lg shadow-md hover:bg-blue-600 transition duration-300 ml-3 w-24 h-9 ${buttonBg}`}>{isLoading ? <Loader width={20} height={20} top={'9px'} left={'28px'}/>:'Add'}</button>
+          </div>
         </div>
       </div>
     )

@@ -40,13 +40,13 @@ export default function LogoutButton() {
                     AlerFunction(true, errorRed, "No Internet", 4000);
                   return;
                 }
-                AlerFunction(true, errorRed, response?.data?.message, 4000);
+                AlerFunction(true, errorRed, response?.data?.message, 2000);
               }
         }
       };
   return (
-    <div className="mx-2">
-       <button onClick={handleLogout} className="w-full md:w-auto bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition duration-300 mr-3">
+    <div className="sm:mr-4">
+       <button onClick={handleLogout} className="w-full md:w-auto bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition duration-300">
       {userLoginState ? 'Logout':'Login'}
     </button>
     </div>

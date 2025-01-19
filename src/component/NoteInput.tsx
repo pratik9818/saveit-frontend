@@ -121,15 +121,15 @@ export default function NoteInput({
     }
   }
   return (
-    <div className={`w-[85%] flex ${postion} justify-between`}>
+    <div className={`w-[85%] flex ${postion} justify-between items-center`}>
       <textarea
         ref={currentValue}
         value={newNote}
-        placeholder="Write something"
+        placeholder="Write here to save"
         onKeyDown={(e) => saveNote(e)}
         onChange={(e) => writeNote(e)}
         style={{ height: textareaHeight }}
-        className="w-[100%] p-2 mx-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none z-20"
+        className="w-[100%] p-2 mx-1 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 bg-gray-100 border-none resize-none z-20 "
       ></textarea>
       <SaveFragment loading={isLoading} />
     </div>

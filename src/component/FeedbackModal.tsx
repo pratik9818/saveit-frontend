@@ -2,7 +2,7 @@ import { useRecoilState } from "recoil"
 import { feedbackModal } from "../recoil/Store"
 import { useState } from "react";
 import axios from "axios";
-import { API_VERSION, DOMAIN, errorRed, successGreen } from "../utils/Constant";
+import { API_VERSION, buttonBg, DOMAIN, errorRed, successGreen } from "../utils/Constant";
 import useAlertFunction from "../hooks/AlertFunction";
 
 export default function FeedbackModal() {
@@ -31,7 +31,7 @@ export default function FeedbackModal() {
     }
 
     async function sendForm() {
-     const isFormFilled = formData.bugs || formData.features || formData.suggestions || formData.improvements || formData.forwhat;
+     const isFormFilled = formData.bugs || formData.features || formData.suggestions || formData.improvements;
       if(!isFormFilled) return AlertFunction(true, errorRed, "Please fill one of the field", 4000);
       
         try {
@@ -82,11 +82,11 @@ export default function FeedbackModal() {
         
         <div className="mb-4">
           <label className="block font-medium mb-1" htmlFor="forwhat">
-            for ?
+            Plese select what you want to give feedback for
           </label>
           <select id="forwhat" name='forwhat' value={formData.forwhat} onChange={handleChange} className="w-full px-3 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option>Extension</option>
             <option>website</option>
+            <option>Extension</option>
           </select>
         </div>
         <div className="mb-4">
@@ -147,7 +147,7 @@ export default function FeedbackModal() {
         
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200"
+          className={`w-full text-white font-semibold py-2 px-4 rounded-md ${buttonBg}`}
         >
           Submit Feedback
         </button>

@@ -61,3 +61,5 @@ export const fragmentDimensionBelow700px = [
 ];
 
 export const breakFragmentPixel = 640 
+export const buttonBg = 'bg-gradient-to-r from-blue-500 via-purple-500 to-purple-700'
+export const frgamentBg = 'bg-gradient-to-br from-blue-600 to-purple-800'

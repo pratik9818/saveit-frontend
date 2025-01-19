@@ -13,7 +13,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="app/auth" Component={LoginPage} />
-          <Route path="/" Component={CapsulePage} />
+          <Route path="app" Component={CapsulePage} />
           <Route path="app/fragment/:capsuleid" Component={FragmentPage} />
         </Routes>
       </Router>

@@ -180,7 +180,7 @@ async function upload(file: File) {
       onDrop={handleDrop}
       className={`${
         dragActive ? "border-blue-500 bg-blue-100" : "border-gray-300"
-      }`}
+      } h-12 w-12 flex justify-center items-center`}
     >
       <label htmlFor="fileinput" className="cursor-pointer">
         {startUploading ? <icons.UploadIcon /> : <icons.SelectFilesIcon />}

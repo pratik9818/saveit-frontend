@@ -110,13 +110,12 @@ export default function FragmentAboutModal({fragmentdetails}:fragmentActionProps
     }
 };
   return (
-   <div className={`absolute z-20 shadow-sm border -left-[0px] w-42 h-auto text-sm p-2 bg-gray-100 ${!indexState || indexState == 1 ? '-top-28':'top-1'}`}>
+   <div className={`absolute z-20 shadow-sm border -left-[0px] w-42 h-auto text-sm p-2 rounded-lg bg-white ${!indexState || indexState == 1 ? '-top-28':'top-1'}`}>
     <div className="m-1">Size : {fragmentdetails.size} Mb</div>
-    <div className="m-1">Created : {new Date(fragmentdetails.created_at).toDateString()}</div>
+    <div className="m-1">Created : {new Date(fragmentdetails.created_at).toLocaleTimeString() +' '+ new Date(fragmentdetails.created_at).toDateString()}</div>
     <button className="m-1" onClick={handleDownload}> Download</button>
-    <div className="m-1">{fragmentdetails.updated_at && fragmentdetails.fragment_type == 'text' ? 'Modified :' + new Date(fragmentdetails.updated_at).toDateString():''}</div>
-   <button className="bg-red-500 p-[4px] rounded-sm" onClick={deleteFragment}>{isDelete ? 'Deleting':'Delete'}</button>
+    <div className="m-1">{fragmentdetails.updated_at && fragmentdetails.fragment_type == 'text' ? 'Modified :' + new Date(fragmentdetails.updated_at).toLocaleTimeString() + ' ' + new Date(fragmentdetails.updated_at).toDateString():''}</div>
+   <button className="bg-red-500 p-[5px] rounded-sm" onClick={deleteFragment}>{isDelete ? 'Deleting':'Delete'}</button>
    </div>
-   
   )
 }

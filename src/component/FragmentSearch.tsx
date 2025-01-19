@@ -37,12 +37,12 @@ export default function FragmentSearch() {
     setTyping(timoutId);
   }
   return (
-    <div className="fixed flex w-[100%] py-1">
+    <div className="fixed flex w-[100%] py-1 border">
       <input
         type="text"
         onChange={(e) => searching(e)}
-        placeholder="search fragment by tag , file name and text content"
-        className="w-full md:max-w-[60%] mr-auto p-2 mx-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="Search fragment by tag , file name and text content"
+        className="w-full md:max-w-[60%] mr-auto p-2 mx-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:ml-4"
       />
       {/* <div className="border rounded-sm px-1 mr-6 font-bold text-slate-500 pt-1 bg-slate-100">Capsule {'>'} {activeCapsuleName?.substring(0,20)}</div> */}
       <LogoutButton/>

@@ -123,7 +123,7 @@ export default function EditFragmentText() {
         {updateing ? (
           <Loader width={20} height={20} top={"8px"} left={"38px"} />
         ) : (
-          "update"
+          "Update"
         )}
       </button>
     </div>

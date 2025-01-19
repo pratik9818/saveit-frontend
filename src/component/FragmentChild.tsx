@@ -58,7 +58,7 @@ export default function FragmentChild({
           />
     } else {
       return (
-        <div onClick={multiFragmentSelect} className="flex mt-6">
+        <div onClick={multiFragmentSelect} className="flex py-6">
           {<icons.FileIcon />} {fragmentdetails.file_name?.substring(0, 150)}
         </div>
       );
@@ -91,21 +91,32 @@ export default function FragmentChild({
       );
     } else setSelectedFragment([...selectedFragmentValue, fragmentdetails]);
   }
+  function colorDecision() {
+    if (fragmentdetails.fragment_type == "text") {
+      return "bg-purple-300";
+    } else if (fragmentdetails.fragment_type == "video") {
+      return "bg-gray-200";
+    } else if (fragmentdetails.fragment_type == "image") {
+      return "bg-gray-200";
+    } else {
+      return "bg-blue-300";
+    }
+  }
   return (
     <div
       key={fragmentdetails.fragment_id}
-      className={`bg-gray-300 rounded-sm m-6 text-left ${fragmentMargin} max-w-xl py-2 px-4 relative ${
+      className={`rounded-lg text-left ${fragmentMargin} max-w-xl py-2 m-6 border px-4 relative ${
         selectedFragmentValue.includes(fragmentdetails)
           ? "shadow-[0_0_15px_rgba(251,44,133,0.9)]"
-          : "shadow-md"
-      }`}
+          : "shadow-sm"
+      } ${colorDecision()}`}
       style={{ minWidth, minHeight }}
       onMouseEnter={showAction}
       onMouseLeave={hideAction}
     >
       {fragmentElement()}
       {fragmentdetails?.tag && (
-        <div className="flex w-[100%] absolute -bottom-6 bg-gray-200 shadow-md rounded-sm p-1 right-0 outline-none">
+        <div className="flex w-[100%] absolute -bottom-6 bg-gray-100 shadow-md rounded-sm p-1 right-0 outline-none">
           <icons.TagIcon /> {fragmentdetails?.tag.substring(0, 20)}
         </div>
       )}
