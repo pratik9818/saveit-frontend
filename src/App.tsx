@@ -4,6 +4,7 @@ import Alert from "./utils/Alert";
 import CapsulePage from "./pages/CapsulePage";
 import CreateCapsuleModal from "./component/CreateCapsuleModal";
 import FragmentPage from "./pages/FragmentPage";
+import LandingPage from "./pages/LandingPage";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Alert />
       <Router>
         <Routes>
+          <Route path="/" Component={LandingPage} />
           <Route path="app/auth" Component={LoginPage} />
           <Route path="app" Component={CapsulePage} />
           <Route path="app/fragment/:capsuleid" Component={FragmentPage} />
