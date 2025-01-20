@@ -129,7 +129,7 @@ export default function CapsuleName({
         />
       ) : (
         <div onClick={changeNode} id="namediv">
-          {changeName.substring(0, 30)}
+          {changeName.substring(0, 20)}
         </div>
       )}
     </div>

@@ -8,7 +8,7 @@ const icons = {
   AboutIcon: () => <img className="w-[20px] h-[20px] mx-2 cursor-pointer" src="/assets/about.png" alt="about" />,
   FileIcon: () => <img className="w-[28px] h-[28px] mx-2" src="/assets/file.png" alt="file" />,
   CopyIcon: () => <img className="w-[20px] h-[20px] mx-2 mt-[4px] cursor-copy" src="/assets/copy.png" alt="copy" />,
-  LogoIcon:()=> <img className="w-[70px] h-[35px] md:w-[80px] md:h-[35px] mr-4 cursor-pointer" src="/assets/logo.png" alt="Saveit.tech" />,
+  LogoIcon:()=> <img onClick={() => location.reload()} className="w-[70px] h-[35px] md:w-[80px] md:h-[35px] mr-4 cursor-pointer" src="/assets/logo.png" alt="Saveit.tech" />,
 };
 
 export default icons;

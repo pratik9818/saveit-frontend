@@ -13,8 +13,11 @@ export default function FragmentLayout() {
   const {capsuleid} = useParams()
   const setSelectedFragment = useSetRecoilState(selectedFragment);
   useEffect(()=>{
+    document.title = "Saveit.tech - Save all type of digital content";
+
     setSelectedFragment([])
   },[])
+  
     const setActiveCapsule = useSetRecoilState(activeCapsule)
     const setScreenShot = useSetRecoilState(screenShot)
     if(capsuleid) setActiveCapsule(capsuleid)

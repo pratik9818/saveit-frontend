@@ -4,7 +4,7 @@ import axios from "axios";
 import { API_VERSION, DOMAIN, errorRed, successGreen } from "../utils/Constant";
 import useAlertFunction from "../hooks/AlertFunction";
 import Loader from "../component/Loader";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { userLogin } from "../recoil/Store";
@@ -17,6 +17,12 @@ export default function LoginPage() {
   const setUserLogin = useSetRecoilState(userLogin)
   const [isLoading , setIsLoading] = useState<boolean>(false)
   const navigate = useNavigate()
+  useEffect(() => {
+    if(localStorage.getItem("is_user_login") === "true"){
+      navigate('/app/capsules')
+    }
+      document.title = "Saveit.tech - Sign in using google";
+  }, [])
   const handleGoogleSuccess = async (response: CredentialResponse) => {
     if (response.credential) {
       setIsLoading(true)
@@ -28,9 +34,10 @@ export default function LoginPage() {
         );
         if (status === 200 || status === 201) {
           setUserLogin(true)
-          navigate('/app')
+          navigate('/app/capsules')
           AlertFunction(true, successGreen, message, 1000);
           setIsLoading(false)
+           localStorage.setItem("is_user_login", "true")
         }
       } catch (error) {
         setUserLogin(false)
@@ -58,7 +65,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-500 to-purple-600">
-      <div className="bg-white shadow-lg rounded-lg p-8 w-96 relative">
+      <div className="bg-white shadow-lg rounded-lg py-8 px-4 w-96 relative">
         <div className="text-2xl font-bold text-gray-800 mb-4 text-center flex justify-center gap-2">
           <span className="text-[26px]">Welcome to </span> <icons.LogoIcon/>
         </div>

@@ -96,6 +96,18 @@ export default function FragmentAboutModal({fragmentdetails}:fragmentActionProps
       }
     }
   }
+  function formatFileSize(sizeInMB: number | null): string {
+    if (!sizeInMB) return '0 Bytes';
+    
+    if (sizeInMB >= 1) {
+      return `${sizeInMB.toFixed(2)} MB`;
+    } else if (sizeInMB >= 0.001) {
+      return `${(sizeInMB * 1024).toFixed(2)} KB`;
+    } else {
+      return `${(sizeInMB * 1024 * 1024).toFixed(0)} Bytes`;
+    }
+  }
+  
 
     function handleDownload(){
 
@@ -111,7 +123,7 @@ export default function FragmentAboutModal({fragmentdetails}:fragmentActionProps
 };
   return (
    <div className={`absolute z-20 shadow-sm border -left-[0px] w-42 h-auto text-sm p-2 rounded-lg bg-white ${!indexState || indexState == 1 ? '-top-28':'top-1'}`}>
-    <div className="m-1">Size : {fragmentdetails.size} Mb</div>
+    <div className="m-1">Size : {formatFileSize(fragmentdetails.size)}</div>
     <div className="m-1">Created : {new Date(fragmentdetails.created_at).toLocaleTimeString() +' '+ new Date(fragmentdetails.created_at).toDateString()}</div>
     <button className="m-1" onClick={handleDownload}> Download</button>
     <div className="m-1">{fragmentdetails.updated_at && fragmentdetails.fragment_type == 'text' ? 'Modified :' + new Date(fragmentdetails.updated_at).toLocaleTimeString() + ' ' + new Date(fragmentdetails.updated_at).toDateString():''}</div>

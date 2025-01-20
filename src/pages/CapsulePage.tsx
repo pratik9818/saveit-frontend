@@ -1,8 +1,12 @@
+import { useEffect } from "react";
 import FeedbackModal from "../component/FeedbackModal";
 import CapsuleNavbar from "../layouts/CapsuleNavbar";
 import Capsules from "../layouts/Capsules";
 
 export default function CapsulePage() {
+  useEffect(()=>{
+      document.title = "Saveit.tech - Organize your content neatly into capsules";
+  },[])
   return (
     <div>
       <CapsuleNavbar />
