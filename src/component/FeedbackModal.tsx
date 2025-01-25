@@ -2,19 +2,20 @@ import { useRecoilState } from "recoil"
 import { feedbackModal } from "../recoil/Store"
 import { useState } from "react";
 import axios from "axios";
-import { API_VERSION, DOMAIN, errorRed, successGreen } from "../utils/Constant";
+import { API_VERSION, buttonBg, DOMAIN, errorRed, successGreen } from "../utils/Constant";
 import useAlertFunction from "../hooks/AlertFunction";
 
 export default function FeedbackModal() {
     const AlertFunction = useAlertFunction()
     const [hide ,setHide] = useRecoilState(feedbackModal)
     const [formData, setFormData] = useState({
+      forwhat: "Extension",
         bugs: "",
         features: "",
         improvements: "",
         suggestions: "",
       });
-      const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
       };
@@ -30,12 +31,16 @@ export default function FeedbackModal() {
     }
 
     async function sendForm() {
+     const isFormFilled = formData.bugs || formData.features || formData.suggestions || formData.improvements;
+      if(!isFormFilled) return AlertFunction(true, errorRed, "Please fill one of the field", 4000);
+      
         try {
           const {
             data: { message },
             status,
           } = await axios.post(
             `${DOMAIN}/api/${API_VERSION}/feedback`,{
+              forWhat: formData.forwhat,
                 bugs:formData.bugs,
                 features:formData.features,
                 improvements:formData.improvements,
@@ -45,7 +50,7 @@ export default function FeedbackModal() {
           );
           if (status == 201) {
             AlertFunction(true, successGreen, message, 4000);
-            setFormData({ bugs: "", features: "", improvements: "", suggestions: "" });
+            setFormData({ forwhat : "" ,bugs: "", features: "", improvements: "", suggestions: "" });
             setHide(false)
           }
         } catch (error) {
@@ -71,10 +76,19 @@ export default function FeedbackModal() {
     <div id="feedbackModal" className="bg-gray-100 absolute w-[100vw] h-[98vh] top-0 flex justify-center items-center min-h-screen" onClick={(e)=>toogleModal(e)}>
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md h-auto lg:h-[100%]"
+        className="bg-white p-2 rounded-lg shadow-lg w-full max-w-md h-auto lg:h-[100%]"
       >
-        <h1 className="text-2xl font-bold text-center mb-6">Feedback Form</h1>
+        <h1 className="text-2xl font-bold text-center">Feedback Form</h1>
         
+        <div className="mb-4">
+          <label className="block font-medium mb-1" htmlFor="forwhat">
+            Plese select what you want to give feedback for
+          </label>
+          <select id="forwhat" name='forwhat' value={formData.forwhat} onChange={handleChange} className="w-full px-3 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option>website</option>
+            <option>Extension</option>
+          </select>
+        </div>
         <div className="mb-4">
           <label className="block font-medium mb-1" htmlFor="bugs">
             Any bugs encountered?
@@ -85,7 +99,7 @@ export default function FeedbackModal() {
             value={formData.bugs}
             onChange={handleChange}
             placeholder="Describe any bugs you encountered..."
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         
@@ -99,7 +113,7 @@ export default function FeedbackModal() {
             value={formData.features}
             onChange={handleChange}
             placeholder="What features would you like to see?"
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         
@@ -113,7 +127,7 @@ export default function FeedbackModal() {
             value={formData.improvements}
             onChange={handleChange}
             placeholder="How can we improve?"
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         
@@ -127,13 +141,13 @@ export default function FeedbackModal() {
             value={formData.suggestions}
             onChange={handleChange}
             placeholder="Any other suggestions?"
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200"
+          className={`w-full text-white font-semibold py-2 px-4 rounded-md ${buttonBg}`}
         >
           Submit Feedback
         </button>

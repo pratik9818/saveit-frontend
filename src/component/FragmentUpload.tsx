@@ -5,10 +5,10 @@ import NoteInput from "./NoteInput"
 
 export default function FragmentUpload() {
   return (
-    <div className="border-gray-200 shadow-lg fixed bottom-1 w-[100%] flex justify-evenly ">
+    <div className="border-2 border-gray-200 fixed md:w-[80%] w-[100%] flex justify-evenly bg-gray-100 rounded-lg sm:mx-[10%] items-center z-10 bottom-1">
     <FileUpload/>
-    <ExpandNote/>
     <NoteInput textareaHeight={'none'}/>
+    <ExpandNote/>
     {/* <SaveFragment/> */}
     </div>
   )

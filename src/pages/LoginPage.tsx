@@ -4,11 +4,11 @@ import axios from "axios";
 import { API_VERSION, DOMAIN, errorRed, successGreen } from "../utils/Constant";
 import useAlertFunction from "../hooks/AlertFunction";
 import Loader from "../component/Loader";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { userLogin } from "../recoil/Store";
-
+import icons from "../utils/Icons";
 const domain = DOMAIN;
 const apiVersion = API_VERSION;
 
@@ -17,7 +17,12 @@ export default function LoginPage() {
   const setUserLogin = useSetRecoilState(userLogin)
   const [isLoading , setIsLoading] = useState<boolean>(false)
   const navigate = useNavigate()
-
+  useEffect(() => {
+    if(localStorage.getItem("is_user_login") === "true"){
+      navigate('/app/capsules')
+    }
+      document.title = "Saveit.tech - Sign in using google";
+  }, [])
   const handleGoogleSuccess = async (response: CredentialResponse) => {
     if (response.credential) {
       setIsLoading(true)
@@ -30,8 +35,9 @@ export default function LoginPage() {
         if (status === 200 || status === 201) {
           setUserLogin(true)
           navigate('/app/capsules')
-          AlertFunction(true, successGreen, message, 4000);
+          AlertFunction(true, successGreen, message, 1000);
           setIsLoading(false)
+           localStorage.setItem("is_user_login", "true")
         }
       } catch (error) {
         setUserLogin(false)
@@ -39,13 +45,14 @@ export default function LoginPage() {
         if (axios.isAxiosError(error)) {
           const { status, response, message } = error;
           if (status === 500) {
-            AlertFunction(true, errorRed, "Something went wrong! Please try again.", 3000);
+            AlertFunction(true, errorRed, "Something went wrong! Please try again.", 1000);
             return;
           } else if (message === "Network Error") {
             AlertFunction(true, errorRed, "No Internet", 4000);
             return;
           }
-          AlertFunction(true, errorRed, response?.data?.message, 4000);
+          
+          AlertFunction(true, errorRed, response?.data?.message, 1000);
         }
       }
     }
@@ -58,10 +65,10 @@ export default function LoginPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-500 to-purple-600">
-      <div className="bg-white shadow-lg rounded-lg p-8 w-96 relative">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center">
-          Welcome to Save it
-        </h1>
+      <div className="bg-white shadow-lg rounded-lg py-8 px-4 w-96 relative">
+        <div className="text-2xl font-bold text-gray-800 mb-4 text-center flex justify-center gap-2">
+          <span className="text-[26px]">Welcome to </span> <icons.LogoIcon/>
+        </div>
         <p className="text-sm text-gray-600 mb-6 text-center">
           Sign in to continue and access cool feature
         </p>

@@ -1,13 +1,14 @@
 const icons = {
-  SelectFilesIcon: () => <img className=" cursor-pointer mx-2" src="/assets/selectfiles.png" alt="Select Files" />,
-  ExpandTextIcon: () => <img className="mx-2 cursor-pointer" src="/assets/expandtext.png" alt="Expand Text" />,
+  SelectFilesIcon: () => <img className="w-[30px] h-[33px] cursor-pointer" src="/assets/selectfiles.png" alt="Select Files" />,
+  ExpandTextIcon: () => <img className="mx-1 cursor-pointer" src="/assets/expandtext.png" alt="Expand Text" />,
   AddTextIcon: () => <img className="cursor-pointer mx-2" src="/assets/addtext.png" alt="Add Text" />,
-  UploadIcon: () => <img className="cursor-pointer mx-2" src="/assets/uploadfiles.gif" alt="Upload Files" />,
-  TagIcon: () => <img className="w-[20px] h-[20px] mx-2 mt-[4px] cursor-pointer" src="/assets/tag.png" alt="Upload Files" />,
-  EditTextIcon: () => <img className="w-[20px] h-[20px] mx-2 cursor-pointer" src="/assets/edit.png" alt="Upload Files" />,
-  AboutIcon: () => <img className="w-[20px] h-[20px] mx-2 cursor-pointer" src="/assets/about.png" alt="Upload Files" />,
-  FileIcon: () => <img className="w-[28px] h-[28px] mx-2" src="/assets/file.png" alt="Upload Files" />,
-  CopyIcon: () => <img className="w-[20px] h-[20px] mx-2 mt-[4px] cursor-copy" src="/assets/copy.png" alt="Upload Files" />,
+  UploadIcon: () => <img className="cursor-pointer" src="/assets/uploadfiles.gif" alt="Upload Files" />,
+  TagIcon: () => <img className="w-[20px] h-[20px] mx-2 mt-[4px] cursor-pointer" src="/assets/tag.png" alt="tag" />,
+  EditTextIcon: () => <img className="w-[20px] h-[20px] mx-2 cursor-pointer" src="/assets/edit.png" alt="edit" />,
+  AboutIcon: () => <img className="w-[20px] h-[20px] mx-2 cursor-pointer" src="/assets/about.png" alt="about" />,
+  FileIcon: () => <img className="w-[28px] h-[28px] mx-2" src="/assets/file.png" alt="file" />,
+  CopyIcon: () => <img className="w-[20px] h-[20px] mx-2 mt-[4px] cursor-copy" src="/assets/copy.png" alt="copy" />,
+  LogoIcon:()=> <img onClick={() => location.reload()} className="w-[70px] h-[35px] md:w-[80px] md:h-[35px] mr-4 cursor-pointer" src="/assets/logo.png" alt="Saveit.tech" />,
 };
 
 export default icons;

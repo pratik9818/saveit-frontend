@@ -19,7 +19,16 @@ export default function Capsules() {
   const scrollHeight = useRef<HTMLDivElement | null>(null);
   const searchValueState = useRecoilValue(searchValue);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const setUserLogin = useSetRecoilState(userLogin)
+  const setUserLogin = useSetRecoilState(userLogin);
+  const folderColors = [
+    "bg-green-300",
+    "bg-blue-300",
+    "bg-yellow-300",
+    "bg-red-300",
+    "bg-purple-300",
+    "bg-pink-300",
+    "bg-gray-300",
+  ];
   useEffect(() => {
     setIsLoading(true);
     setCapsulesState([]);
@@ -47,12 +56,10 @@ export default function Capsules() {
       );
 
       if (data) {
-
         setCapsulesState((prv) => [...prv, ...data]);
         setTriggerFetch(false);
         setIsLoading(false);
-        setUserLogin(true)
-
+        setUserLogin(true);
       }
     } catch (error) {
       setIsLoading(false);
@@ -72,7 +79,7 @@ export default function Capsules() {
           AlertFunction(true, errorRed, "No Internet", 4000);
           return;
         }
-        AlertFunction(true, errorRed, response?.data?.message, 4000);
+        AlertFunction(true, errorRed, response?.data?.message, 2000);
       }
     }
   }
@@ -136,17 +143,26 @@ export default function Capsules() {
   return (
     <div
       ref={scrollHeight}
-      className="h-[75vh] lg:h-[80vh] flex flex-wrap justify-center overflow-y-scroll"
+      className="h-[75vh] lg:h-[80vh] flex flex-wrap overflow-y-scroll "
       onScroll={triggerfetch}
     >
       {isLoading ? (
         <Loader width={40} height={40} top={"50vh"} left={"50vw"} />
       ) : capsulesState.length ? (
-        capsulesState.map((element) => {
+        capsulesState.map((element, index) => {
+          const formatDateTime = (date: string | Date | null) => {
+            if (!date) return "";
+            const dateObj = date instanceof Date ? date : new Date(date);
+            return `${dateObj.toDateString()} ${
+              dateObj.toLocaleTimeString()
+            }`;
+          };
           return (
             <div
               key={element.capsule_id}
-              className="bg-white w-[270px] h-[240px] flex flex-col  justify-between shadow-md rounded-lg p-3 border border-gray-200 hover:shadow-lg transition duration-300 m-4"
+              className={`w-[270px] h-[180px] flex flex-col  justify-between shadow-md rounded-lg p-3 border border-gray-200 hover:shadow-lg transition duration-300 m-4 ${
+                folderColors[index % folderColors.length]
+              }`}
             >
               <ThreedotImg capsuleid={element.capsule_id} />
               <CapsuleActionModal capsuleid={element.capsule_id} />
@@ -157,7 +173,11 @@ export default function Capsules() {
               <CapsuleName
                 name={element.capsule_name}
                 capsuleid={element.capsule_id}
+                bgColor={folderColors[index % folderColors.length]}
               />
+              <div className="text-[12px]">
+                {formatDateTime(element.created_at)}
+              </div>
             </div>
           );
         })

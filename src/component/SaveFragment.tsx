@@ -70,5 +70,5 @@ export default function  SaveFragment({loading}:loadingtype) {
   }
 
   // return <button onClick={saveNote}>save</button>;
-  return <div onClick={saveNote}>{startUploading || loading ? <icons.UploadIcon/>:<icons.AddTextIcon/>}</div>
+  return <div className="w-12 h-12 flex justify-center items-center" onClick={saveNote}>{startUploading || loading ? <icons.UploadIcon/>:<icons.AddTextIcon/>}</div>
 }
