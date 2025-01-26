@@ -1,0 +1,59 @@
+name: Build and Deploy React App
+
+on:
+  push:
+    branches:
+      - main # Trigger the workflow on push to the main branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16 # Adjust the version if needed
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Build the React app
+      - name: Build the React app
+        run: npm run build
+
+      # Step 5: Deploy to the Droplet
+      - name: Deploy to Droplet
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          # Configure SSH
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+          # Connect to the Droplet and delete the old files
+          ssh -o StrictHostKeyChecking=no root@159.65.151.121 << EOF
+            # Navigate to the directory
+            cd /var/www/saveit.tech || exit 1
+
+            # Delete all files and directories inside it
+            rm -rf *
+
+            # Verify cleanup
+            echo "Old files deleted successfully!"
+          EOF
+
+          # Transfer the new build folder to the Droplet
+          scp -r ./build/* root@159.65.151.121:/var/www/saveit.tech/
+
+          # Restart the web server (if required)
+          ssh root@159.65.151.121 "systemctl restart nginx"
+
+
