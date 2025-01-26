@@ -51,7 +51,7 @@ jobs:
           EOF
 
           # Transfer the new build folder to the Droplet
-          scp -r ./build/* root@159.65.151.121:/var/www/saveit.tech/
+          scp -r ./dist/* root@159.65.151.121:/var/www/saveit.tech/
 
           # Restart the web server (if required)
           ssh root@159.65.151.121 "systemctl restart nginx"
