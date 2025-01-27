@@ -31,7 +31,7 @@ export default function CapsuleDelete() {
             (capsule) => capsule.capsule_id !== capsuleActionModalIdValue
           )
         );
-        AlertFunction(true, successGreen, "Deleted", 2000);
+        AlertFunction(true, successGreen, "Deleted", 1000);
       }
       setLoading(false);
     } catch (error) {
@@ -43,14 +43,14 @@ export default function CapsuleDelete() {
             true,
             errorRed,
             "Something went wrong ! please try again",
-            3000
+            2000
           );
           return;
         }else if(message == 'Network Error'){
-          AlertFunction(true, errorRed, 'No Internet', 4000);
+          AlertFunction(true, errorRed, 'No Internet', 2000);
           return
         }
-        AlertFunction(true, errorRed, response?.data.message, 3000);
+        AlertFunction(true, errorRed, response?.data.message, 1000);
       }
     }
   }

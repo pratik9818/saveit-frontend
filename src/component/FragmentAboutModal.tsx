@@ -42,7 +42,7 @@ export default function FragmentAboutModal({fragmentdetails}:fragmentActionProps
           setFragmentStore(prevState =>
               prevState.filter(fragment => fragment.fragment_id !== fragmentdetails.fragment_id)
             );
-            AlertFunction(true, successGreen, message, 3000);
+            AlertFunction(true, successGreen, message, 1000);
             setIsDelete(false)
       }
         
@@ -59,10 +59,10 @@ export default function FragmentAboutModal({fragmentdetails}:fragmentActionProps
           );
           return;
         }else if(message == 'Network Error'){
-          AlertFunction(true, errorRed, 'No Internet', 4000);
+          AlertFunction(true, errorRed, 'No Internet', 2000);
           return
         }
-        AlertFunction(true, errorRed, response?.data?.message, 4000);
+        AlertFunction(true, errorRed, response?.data?.message, 2000);
       }
       
     }
@@ -85,14 +85,14 @@ export default function FragmentAboutModal({fragmentdetails}:fragmentActionProps
             true,
             errorRed,
             "Something went wrong ! please try again",
-            4000
+            2000
           );
           return;
         } else if (message == "Network Error") {
-          AlertFunction(true, errorRed, "No Internet", 4000);
+          AlertFunction(true, errorRed, "No Internet", 2000);
           return;
         }
-        AlertFunction(true, errorRed, response?.data?.message, 4000);
+        AlertFunction(true, errorRed, response?.data?.message, 1000);
       }
     }
   }

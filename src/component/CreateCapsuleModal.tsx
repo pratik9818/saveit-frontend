@@ -53,20 +53,20 @@ export default function CreateCapsuleModal() {
       setIsModalOpen(false)
       setInputState("")
       setIsLoading(false)
-      AlertFunction(true,successGreen,data.message,3000)
+      AlertFunction(true,successGreen,data.message,1000)
     }
    } catch (error) {
     setIsLoading(false)
     if(axios.isAxiosError(error)){
       const {status,response,message} = error
       if(status == 500){
-        AlertFunction(true,errorRed,'Something went wrong ! please try again',3000)
+        AlertFunction(true,errorRed,'Something went wrong ! please try again',2000)
         return
       }else if(message == 'Network Error'){
-        AlertFunction(true, errorRed, 'No Internet', 4000);
+        AlertFunction(true, errorRed, 'No Internet',2000);
         return
       }
-        AlertFunction(true,errorRed,response?.data?.message,4000)
+        AlertFunction(true,errorRed,response?.data?.message,1000)
      }
    }
   }

@@ -48,7 +48,7 @@ export default function LoginPage() {
             AlertFunction(true, errorRed, "Something went wrong! Please try again.", 1000);
             return;
           } else if (message === "Network Error") {
-            AlertFunction(true, errorRed, "No Internet", 4000);
+            AlertFunction(true, errorRed, "No Internet", 2000);
             return;
           }
           
@@ -60,7 +60,7 @@ export default function LoginPage() {
 
   const handleGoogleFailure = () => {
     console.error("Google sign-in error");
-    AlertFunction(true, errorRed, "Error in Google sign-in! Please try again.", 4000);
+    AlertFunction(true, errorRed, "Error in Google sign-in! Please try again.", 2000);
   };
 
   return (
@@ -73,10 +73,12 @@ export default function LoginPage() {
           Sign in to continue and access cool feature
         </p>
       {isLoading && <Loader width={34} height={34} top="80px" left="170px"/>}
+        <div className="flex justify-center w-[100%]">
         <GoogleSignInButton
           onSuccess={handleGoogleSuccess}
           onError={handleGoogleFailure}
         />
+        </div>
       </div>
     </div>
   );

@@ -76,10 +76,10 @@ export default function Capsules() {
           );
           return;
         } else if (message == "Network Error") {
-          AlertFunction(true, errorRed, "No Internet", 4000);
+          AlertFunction(true, errorRed, "No Internet", 2000);
           return;
         }
-        AlertFunction(true, errorRed, response?.data?.message, 2000);
+        AlertFunction(true, errorRed, response?.data?.message, 1000);
       }
     }
   }
@@ -109,10 +109,10 @@ export default function Capsules() {
           );
           return;
         } else if (message == "Network Error") {
-          AlertFunction(true, errorRed, "No Internet", 4000);
+          AlertFunction(true, errorRed, "No Internet", 2000);
           return;
         }
-        AlertFunction(true, errorRed, response?.data?.message, 4000);
+        AlertFunction(true, errorRed, response?.data?.message, 1000);
       }
     }
   }
@@ -160,7 +160,7 @@ export default function Capsules() {
           return (
             <div
               key={element.capsule_id}
-              className={`w-[270px] h-[180px] flex flex-col  justify-between shadow-md rounded-lg p-3 border border-gray-200 hover:shadow-lg transition duration-300 m-4 ${
+              className={`w-[270px] h-[180px] lg:w-[20%] lg:h-[32%] flex flex-col justify-between shadow-md rounded-lg p-3 border border-gray-200 hover:shadow-lg transition duration-300 m-4 ${
                 folderColors[index % folderColors.length]
               }`}
             >

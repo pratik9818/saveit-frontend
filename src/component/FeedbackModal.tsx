@@ -49,7 +49,7 @@ export default function FeedbackModal() {
             { withCredentials: true }
           );
           if (status == 201) {
-            AlertFunction(true, successGreen, message, 4000);
+            AlertFunction(true, successGreen, message, 1000);
             setFormData({ forwhat : "" ,bugs: "", features: "", improvements: "", suggestions: "" });
             setHide(false)
           }
@@ -65,10 +65,10 @@ export default function FeedbackModal() {
               );
               return;
             } else if (message == "Network Error") {
-              AlertFunction(true, errorRed, "No Internet", 4000);
+              AlertFunction(true, errorRed, "No Internet", 2000);
               return;
             }
-            AlertFunction(true, errorRed, response?.data?.message, 4000);
+            AlertFunction(true, errorRed, response?.data?.message, 1000);
           }
         }
       }

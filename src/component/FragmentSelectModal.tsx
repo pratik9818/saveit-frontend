@@ -40,7 +40,7 @@ export default function FragmentSelectModal() {
         );
 
         setSelectedFragment([]);
-        AlertFunction(true, successGreen, message, 3000);
+        AlertFunction(true, successGreen, message, 1000);
         setIsDelete(false);
       }
     } catch (error) {
@@ -56,10 +56,10 @@ export default function FragmentSelectModal() {
           );
           return;
         } else if (message == "Network Error") {
-          AlertFunction(true, errorRed, "No Internet", 4000);
+          AlertFunction(true, errorRed, "No Internet", 2000);
           return;
         }
-        AlertFunction(true, errorRed, response?.data?.message, 4000);
+        AlertFunction(true, errorRed, response?.data?.message, 1000);
       }
     }
   }

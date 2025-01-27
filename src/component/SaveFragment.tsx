@@ -45,7 +45,7 @@ export default function  SaveFragment({loading}:loadingtype) {
           is_deleted:false
     }
     setFragmentStore([newTextFragment,...fragmentStoreState])
-    AlertFunction(true, successGreen, message, 3000);
+    AlertFunction(true, successGreen, message, 1000);
     setStartUploading(false)
       }
     } catch (error) {
@@ -61,10 +61,10 @@ export default function  SaveFragment({loading}:loadingtype) {
           );
           return;
         }else if(message == 'Network Error'){
-          AlertFunction(true, errorRed, 'No Internet', 4000);
+          AlertFunction(true, errorRed, 'No Internet', 2000);
           return
         }
-        AlertFunction(true, errorRed, response?.data?.message, 4000);
+        AlertFunction(true, errorRed, response?.data?.message, 1000);
       }
     }
   }

@@ -50,7 +50,7 @@ export default function EditFragmentText() {
   }
   async function saveInDb() {
     if (!textValue.length)
-      return AlertFunction(true, errorRed, "Plese type something first", 3000);
+      return AlertFunction(true, errorRed, "Plese type something first", 1000);
     setUpdateing(true);
     storeEnterKey = [];
     try {
@@ -82,7 +82,7 @@ export default function EditFragmentText() {
         );
         // setActiveEditFragmentTextId(null);
         setUpdateing(false);
-        AlertFunction(true, successGreen, message, 3000);
+        AlertFunction(true, successGreen, message, 1000);
       }
     } catch (error) {
       setUpdateing(false);
@@ -97,10 +97,10 @@ export default function EditFragmentText() {
           );
           return;
         } else if (message == "Network Error") {
-          AlertFunction(true, errorRed, "No Internet", 4000);
+          AlertFunction(true, errorRed, "No Internet", 2000);
           return;
         }
-        AlertFunction(true, errorRed, response?.data?.message, 4000);
+        AlertFunction(true, errorRed, response?.data?.message, 2000);
       }
     }
   }

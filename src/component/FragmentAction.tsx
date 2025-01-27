@@ -72,7 +72,7 @@ export default function FragmentAction({
           )
         );
         setEditTag(false);
-        AlertFunction(true, successGreen, message, 3000);
+        AlertFunction(true, successGreen, message, 1000);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -86,10 +86,10 @@ export default function FragmentAction({
           );
           return;
         } else if (message == "Network Error") {
-          AlertFunction(true, errorRed, "No Internet", 4000);
+          AlertFunction(true, errorRed, "No Internet", 2000);
           return;
         }
-        AlertFunction(true, errorRed, response?.data?.message, 4000);
+        AlertFunction(true, errorRed, response?.data?.message, 1000);
       }
     }
   }

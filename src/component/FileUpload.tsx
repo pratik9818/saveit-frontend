@@ -22,7 +22,7 @@ useEffect(() => {
 async function upload(file: File) {
   setStartUploading(true);
   if (!file) {
-    AlertFunction(true, errorRed, "No file selected", 4000);
+    AlertFunction(true, errorRed, "No file selected", 1000);
     setStartUploading(false);
     return;
   }
@@ -129,7 +129,7 @@ async function upload(file: File) {
           )
         );
         
-        AlertFunction(true, successGreen, message, 4000);
+        AlertFunction(true, successGreen, message, 1000);
         if(screenShotfile){
           setScreenShot(null);
         }
@@ -146,11 +146,11 @@ async function upload(file: File) {
     if (axios.isAxiosError(error)) {
       const { status, response, message } = error;
       if (status === 500) {
-        AlertFunction(true, errorRed, "Something went wrong! Please try again", 4000);
+        AlertFunction(true, errorRed, "Something went wrong! Please try again", 2000);
       } else if (message === "Network Error") {
-        AlertFunction(true, errorRed, "No Internet", 4000);
+        AlertFunction(true, errorRed, "No Internet", 2000);
       } else {
-        AlertFunction(true, errorRed, response?.data?.message, 4000);
+        AlertFunction(true, errorRed, response?.data?.message, 1000);
       }
     }
   }
