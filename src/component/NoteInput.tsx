@@ -35,16 +35,18 @@ export default function NoteInput({
 
   async function saveNote(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     const key = e.key;
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
     storeEnterKey.push(key);
-    if (keySet[0] != storeEnterKey[0] && key == "Enter") {
+    if (isMobile && key === "Enter") {
+      storeEnterKey = [];
+      return;
+    }
+
+    if (!isMobile && keySet[0] != storeEnterKey[0] && key == "Enter") {
       e.preventDefault();
       if (!newNote.length)
-        return AlertFunction(true, errorRed, "Please write first", 3000);
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      if (isMobile) {
-        return;
-      }
+        return AlertFunction(true, errorRed, "Please write first", 1000);
       setIsLoading(true);
       storeEnterKey = [];
       const tempId = `temp-${Date.now()}`;

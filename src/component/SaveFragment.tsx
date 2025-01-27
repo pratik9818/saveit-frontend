@@ -15,10 +15,28 @@ export default function  SaveFragment({loading}:loadingtype) {
   const activeCapsuleId = useRecoilValue(activeCapsule);
   const [startUploading , setStartUploading] = useState<boolean>(false)
   async function saveNote() {
-    if(!newNote.length) return AlertFunction(true, errorRed, 'Please write first', 3000);
+    if(!newNote.length) return AlertFunction(true, errorRed, 'Please write first', 1000);
     setStartUploading(true)
+    const tempId = `temp-${Date.now()}`;
+      const newTextFragment = {
+        fragment_id: tempId,
+        capsule_id: activeCapsuleId,
+        size: null, //it should not here that is in client side ----ALERT
+        fragment_type: "text",
+        tag: "",
+        reminder: false,
+        download_count: 0,
+        url: null,
+        text_content: newNote,
+        file_name: null,
+        created_at: new Date().toUTCString(),
+        updated_at: null,
+        is_deleted: false,
+      };
+      setFragmentStore([newTextFragment, ...fragmentStoreState]);
+      setNewNote("");
     try {
-      const { data:{data,message} ,status } = await axios.post(
+      const { data:{data:{fragment_id,size},message} ,status } = await axios.post(
         `${DOMAIN}/api/${API_VERSION}/fragments/text`,
         {
           capsuleId: activeCapsuleId,
@@ -28,23 +46,13 @@ export default function  SaveFragment({loading}:loadingtype) {
         { withCredentials: true }
       );
       if (status == 201) {
-        setNewNote("");
-        const newTextFragment = {
-          fragment_id:data.fragment_id,
-          capsule_id:activeCapsuleId,
-          size:data.size, //it should not here that is in client side ----ALERT
-          fragment_type:'text',
-          tag:'',
-          reminder:false,
-          download_count:0,
-          url:null,
-          text_content:newNote,
-          file_name:null,
-          created_at:new Date().toUTCString(),
-          updated_at:null ,
-          is_deleted:false
-    }
-    setFragmentStore([newTextFragment,...fragmentStoreState])
+        setFragmentStore((prevStore) =>
+          prevStore.map((fragment) =>
+            fragment.fragment_id === tempId
+              ? { ...fragment, fragment_id, size }
+              : fragment
+          )
+        );
     AlertFunction(true, successGreen, message, 1000);
     setStartUploading(false)
       }

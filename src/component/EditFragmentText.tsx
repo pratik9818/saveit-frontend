@@ -37,14 +37,14 @@ export default function EditFragmentText() {
   }
   async function saveText(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     const key = e.key;
-
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     storeEnterKey.push(key);
-    if (keySet[0] != storeEnterKey[0] && key == "Enter") {
+    if (isMobile && key === "Enter") {
+      storeEnterKey = [];
+      return;
+    }
+    if (!isMobile && keySet[0] != storeEnterKey[0] && key == "Enter") {
       e.preventDefault();
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      if (isMobile) {
-        return;
-      }
       saveInDb();
     }
   }
