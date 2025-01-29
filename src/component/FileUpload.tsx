@@ -5,144 +5,170 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { activeCapsule, fragmentStore, screenShot } from "../recoil/Store";
 import useAlertFunction from "../hooks/AlertFunction";
 import icons from "../utils/Icons";
-
+interface FragmentResponse {
+  fragment_id: string;
+  size: number;
+  url: string;
+}
 export default function FileUpload() {
   const AlertFunction = useAlertFunction();
   const activeCapsuleValue = useRecoilValue(activeCapsule);
   const [fragmentStoreState, setFragmentStore] = useRecoilState(fragmentStore);
   const [startUploading, setStartUploading] = useState<boolean>(false);
   const [dragActive, setDragActive] = useState<boolean>(false);
-const [screenShotfile, setScreenShot] = useRecoilState(screenShot);
+  const [screenShotfile, setScreenShot] = useRecoilState(screenShot);
 
-useEffect(() => {
+  useEffect(() => {
     if(screenShotfile){
-    upload(screenShotfile)
+      upload([screenShotfile]);
+    }
+  }, [screenShotfile]);
+
+  async function upload(files: File[]) {
+    setStartUploading(true);
+    if (!files.length) {
+      AlertFunction(true, errorRed, "No files selected", 1000);
+      setStartUploading(false);
+      return;
+    }
+
+    const tempFragments = await Promise.all(files.map(async (file) => {
+      const base64Url = await createBase64(file);
+      const { name, type } = file;
+      let fileType = type.split("/")[0];
+      if (fileType === "image") fileType = "image";
+      else if (fileType === "video") fileType = "video";
+      else fileType = type;
+      
+      const tempId = `temp-${Date.now()}-${name}`;
+      return {
+        fragment_id: tempId,
+        capsule_id: activeCapsuleValue,
+        size: null,
+        fragment_type: fileType,
+        tag: "",
+        reminder: false,
+        download_count: 0,
+        url: base64Url,
+        text_content: null,
+        file_name: name,
+        created_at: new Date().toUTCString(),
+        updated_at: null,
+        is_deleted: false,
+      };
+    }));
+
+    setFragmentStore([...tempFragments, ...fragmentStoreState]);
+    getPresignedUrl(files, tempFragments.map(f => f.fragment_id));
   }
-}, [screenShotfile])
-async function upload(file: File) {
-  setStartUploading(true);
-  if (!file) {
-    AlertFunction(true, errorRed, "No file selected", 1000);
-    setStartUploading(false);
-    return;
+
+  function createBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+    });
   }
 
-  // Create base64 URL
-  const reader = new FileReader();
-  reader.readAsDataURL(file);
-  
-  reader.onload = () => {
-    const base64Url = reader.result as string;
-    const { name, type } = file;
-    let fileType = type.split("/")[0];
-    if (fileType === "image") fileType = "image";
-    else if (fileType === "video") fileType = "video";
-    else fileType = type;
-    const tempId = `temp-${Date.now()}`;
-    const newTextFragment = {
-      fragment_id: tempId,
-      capsule_id: activeCapsuleValue,
-      size: null,
-      fragment_type: fileType,
-      tag: "",
-      reminder: false,
-      download_count: 0,
-      url: base64Url, // Set the base64 URL here
-      text_content: null,
-      file_name: name,
-      created_at: new Date().toUTCString(),
-      updated_at: null,
-      is_deleted: false,
-    };
-
-    setFragmentStore([newTextFragment, ...fragmentStoreState]);
-    getPresignedUrl(file, tempId);
-  };
-}
-
-
-  async function getPresignedUrl(file: File,tempId?:string) {
-    const { name, size } = file;
+  async function getPresignedUrl(files: File[], tempIds: string[]) {
     try {
-      const { data: { url }, status } = await axios.put(
+      const { data: { presignedUrls }, status } = await axios.put(
         `${DOMAIN}/api/${API_VERSION}/presignedurl/upload`,
         {
-          size: size,
-          fileCount: 1,
-          fileName: name,
+          size: files.reduce((acc, file) => acc + file.size, 0),
+          fileCount: files.length,
+          fileNames: files.map(f => f.name),
         },
         {
           withCredentials: true,
         }
       );
+      console.log(presignedUrls);
+      
       if (status === 200) {
-        uploadOnS3(url, file,tempId);
+        await uploadOnS3(presignedUrls, files, tempIds);
       }
     } catch (error) {
       setStartUploading(false);
-      handleAxiosError(error,tempId);
+      handleAxiosError(error, tempIds);
     }
   }
 
-  async function uploadOnS3(presignedUrl: string, file: File,tempId?:string) {
+  async function uploadOnS3(presignedUrls: string[], files: File[], tempIds: string[]) {
     try {
-      const { status } = await axios.put(presignedUrl, file, {
-        headers: { "Content-Type": "application/octet-stream" },
-      });
-      if (status === 200) {
-        saveInDb(file,tempId);
-        setStartUploading(false);
-      }
+      await Promise.all(files.map(async (file, index) => {
+        await axios.put(presignedUrls[index], file, {
+          headers: { "Content-Type": "application/octet-stream" },
+        });
+      }));
+      
+      await saveInDb(files, tempIds);
+      setStartUploading(false);
     } catch (error) {
       setStartUploading(false);
-      handleAxiosError(error,tempId);
+      handleAxiosError(error, tempIds);
     }
   }
 
-  async function saveInDb(file: File,tempId?:string) {
-    const { name, size:fileSize, type } = file;
-    let fileType = type.split("/")[0];
-    if (fileType === "image") fileType = "image";
-    else if (fileType === "video") fileType = "video";
-    else fileType = type;
+  async function saveInDb(files: File[], tempIds: string[]) {
+    const fileObjects = files.map(file => {
+      const { name, size, type } = file;
+      let fileType = type.split("/")[0];
+      if (fileType === "image") fileType = "image";
+      else if (fileType === "video") fileType = "video";
+      else fileType = type;
 
+      return {
+        capsuleId: activeCapsuleValue,
+        size: size,
+        tag: "",
+        fileType: fileType,
+        fileName: name,
+      };
+    });
+    
     try {
-      const { data: { data:{fragment_id,size,url}, message }, status } = await axios.post(
+      const { data: { data: fragments, message }, status } = await axios.post(
         `${DOMAIN}/api/${API_VERSION}/fragments/files`,
-        {
-          capsuleId: activeCapsuleValue,
-          size: fileSize,
-          tag: "",
-          fileType: fileType,
-          fileName: name,
-        },
+        {fileObjects},
         {
           withCredentials: true,
         }
       );
+
       if (status === 201) {
-        setFragmentStore(prevStore => 
-          prevStore.map(fragment => 
-            fragment.fragment_id === tempId 
-              ? {...fragment, fragment_id, size,url}
-              : fragment
-          )
-        );
-        
+        setFragmentStore(prevStore => {
+          const updatedStore = [...prevStore];
+          fragments.forEach((fragment: FragmentResponse, index: number) => {
+            const storeIndex = updatedStore.findIndex(f => f.fragment_id === tempIds[index]);
+            if (storeIndex !== -1) {
+              updatedStore[storeIndex] = {
+                ...updatedStore[storeIndex],
+                fragment_id: fragment.fragment_id,
+                size: fragment.size,
+                url: fragment.url
+              };
+            }
+          });
+          return updatedStore;
+        });
+
         AlertFunction(true, successGreen, message, 1000);
-        if(screenShotfile){
+        if(screenShotfile) {
           setScreenShot(null);
         }
       }
     } catch (error) {
-      handleAxiosError(error,tempId);
+      handleAxiosError(error, tempIds);
     }
   }
 
-  function handleAxiosError(error: unknown,tempId?:string) {
+  function handleAxiosError(error: unknown, tempIds: string[]) {
     setFragmentStore(prevStore => 
-      prevStore.filter(fragment => fragment.fragment_id !== tempId)
+      prevStore.filter(fragment => !tempIds.includes(fragment.fragment_id))
     );
+    
     if (axios.isAxiosError(error)) {
       const { status, response, message } = error;
       if (status === 500) {
@@ -167,9 +193,9 @@ async function upload(file: File) {
   function handleDrop(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault();
     setDragActive(false);
-    const files = e.dataTransfer.files;
-    if (files && files.length > 0) {
-      upload(files[0]); // Upload the first file for simplicity
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length > 0) {
+      upload(files);
     }
   }
 
@@ -189,7 +215,8 @@ async function upload(file: File) {
         id="fileinput"
         type="file"
         accept="*/*"
-        onChange={(e) => e.target.files && upload(e.target.files[0])}
+        multiple
+        onChange={(e) => e.target.files && upload(Array.from(e.target.files))}
         className="hidden"
       />
     </div>
