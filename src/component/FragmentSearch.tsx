@@ -2,8 +2,11 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import {fragmentSearchValue, isFragmentSearch, selectedFragment } from "../recoil/Store";
 import {useState } from "react";
 import LogoutButton from "./LogoutButton";
+import icons from "../utils/Icons";
+import { useNavigate } from "react-router-dom";
 
 export default function FragmentSearch() {
+  const navigate = useNavigate();
   const setFragmentSearch = useSetRecoilState(fragmentSearchValue);
   // const capsules = useRecoilValue(capsulesStore)
   const setIsFragmentSearch = useSetRecoilState(isFragmentSearch);
@@ -38,6 +41,9 @@ export default function FragmentSearch() {
   }
   return (
     <div className="fixed flex w-[100%] py-1 border">
+      <div className="w-[39px]" onClick={()=>navigate('/app/capsules')}>
+     <icons.backIcon/>
+      </div>
       <input
         type="text"
         onChange={(e) => searching(e)}
