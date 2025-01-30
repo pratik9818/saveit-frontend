@@ -1,11 +1,13 @@
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   activeCapsule,
   expandNoteModal,
   fragmentStore,
   newFragmentNote,
+  selectedFragmentCountToUpload,
+  uploadedFragmentCount,
 } from "../recoil/Store";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import axios from "axios";
 import { API_VERSION, DOMAIN, errorRed, successGreen } from "../utils/Constant";
 import useAlertFunction from "../hooks/AlertFunction";
@@ -25,7 +27,8 @@ export default function NoteInput({
   const [newNote, setNewNote] = useRecoilState(newFragmentNote);
   const currentValue = useRef<HTMLTextAreaElement | null>(null);
   const activeCapsuleId = useRecoilValue(activeCapsule);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const setUploadedFragmentCount = useSetRecoilState(uploadedFragmentCount);
+      const setSelectedFragmentCount = useSetRecoilState(selectedFragmentCountToUpload);
   const keySet = ["Shift", "Enter"];
   let storeEnterKey: string[] = [];
   function writeNote(e: React.ChangeEvent<HTMLTextAreaElement>) {
@@ -47,7 +50,10 @@ export default function NoteInput({
       e.preventDefault();
       if (!newNote.length)
         return AlertFunction(true, errorRed, "Please write first", 1000);
-      setIsLoading(true);
+      setSelectedFragmentCount(0)
+      setUploadedFragmentCount(0)
+      setSelectedFragmentCount(1);
+
       storeEnterKey = [];
       const tempId = `temp-${Date.now()}`;
       const newTextFragment = {
@@ -69,6 +75,8 @@ export default function NoteInput({
       setNewNote("");
       if (expandNoteModalValue) setExpandNoteModalValue(false);
       try {
+      setUploadedFragmentCount((prevCount) => prevCount + 1);
+        setUploadedFragmentCount((prevCount) => prevCount + 1);
         const {
           data: {
             data: { fragment_id, size },
@@ -86,6 +94,9 @@ export default function NoteInput({
         );
 
         if (status == 201) {
+        setUploadedFragmentCount((prevCount) => prevCount + 1);
+        setUploadedFragmentCount((prevCount) => prevCount + 1);
+
           setFragmentStore((prevStore) =>
             prevStore.map((fragment) =>
               fragment.fragment_id === tempId
@@ -95,13 +106,14 @@ export default function NoteInput({
           );
 
           AlertFunction(true, successGreen, message, 1000);
-          setIsLoading(false);
+          
         }
       } catch (error) {
         setFragmentStore((prevStore) =>
           prevStore.filter((fragment) => fragment.fragment_id !== tempId)
         );
-        setIsLoading(false);
+        setUploadedFragmentCount(0);
+
 
         if (axios.isAxiosError(error)) {
           const { status, response, message } = error;
@@ -133,7 +145,7 @@ export default function NoteInput({
         style={{ height: textareaHeight }}
         className="w-[100%] p-2 mx-1 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 bg-gray-100 border-none resize-none z-20 "
       ></textarea>
-      <SaveFragment loading={isLoading} />
+      <SaveFragment/>
     </div>
   );
 }

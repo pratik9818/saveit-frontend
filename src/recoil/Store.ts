@@ -91,4 +91,11 @@ export const selectedFragment = atom<fragmentType[]>({
     key:'selected fragment',
     default:[]
 })
-
+export const uploadedFragmentCount = atom<number>({
+    key:'upload fragment count',
+    default:0
+})
+export const selectedFragmentCountToUpload = atom<number>({
+    key:'fragment file count',
+    default:0
+})

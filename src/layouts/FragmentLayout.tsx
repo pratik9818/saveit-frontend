@@ -8,6 +8,7 @@ import EditTextModal from "../component/EditTextModal"
 import ExpandNoteModal from "../component/ExpandNoteModal"
 import { useEffect } from "react"
 import FragmentSelectModal from "../component/FragmentSelectModal"
+import FragmentUploadStatus from "../component/fragmentUploadStatus"
 
 export default function FragmentLayout() {
   const {capsuleid} = useParams()
@@ -51,6 +52,7 @@ export default function FragmentLayout() {
     <div className={`h-[99vh] flex justify-between flex-col bg-gray-100`}>
      <FragmentSearch/>
      <FragmentSelectModal/>
+     <FragmentUploadStatus/>
      <Fragments/>
      <FragmentUpload/>
      {<EditTextModal/>}
