@@ -8,7 +8,7 @@ import EditTextModal from "../component/EditTextModal"
 import ExpandNoteModal from "../component/ExpandNoteModal"
 import { useEffect } from "react"
 import FragmentSelectModal from "../component/FragmentSelectModal"
-import FragmentUploadStatus from "../component/fragmentUploadStatus"
+import FragmentUploadStatus from "../component/FragmentUploadStatus"
 
 export default function FragmentLayout() {
   const {capsuleid} = useParams()
