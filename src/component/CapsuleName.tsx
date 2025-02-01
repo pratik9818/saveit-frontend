@@ -117,7 +117,7 @@ export default function CapsuleName({
   //   }
   // }
   return (
-    <div className='text-xl font-bold font-mono my-2'>
+    <div className='text-xl font-bold font-mono my-1 w-[80%]'>
       {isChangeNode ? (
         <input
           className={`outline-none w-[100%] ${bgColor}`}
