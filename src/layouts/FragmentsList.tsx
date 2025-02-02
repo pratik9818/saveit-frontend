@@ -4,6 +4,7 @@ import {
   fragmentSearchValue,
   fragmentStore,
   isFragmentSearch,
+  selectedFragment,
   userLogin,
 } from "../recoil/Store";
 import { useEffect, useRef, useState } from "react";
@@ -19,15 +20,18 @@ export default function FragmentsList() {
   const activeCapsuleValue = useRecoilValue(activeCapsule);
   const scrollHeight = useRef<HTMLDivElement | null>(null);
   const [isTriggerFetch, setTriggerFetch] = useState<boolean>(false);
+  
   const fragmentSearchValues = useRecoilValue(fragmentSearchValue);
   const isFragmentSearchState = useRecoilValue(isFragmentSearch);
   const [isLoading , setIsLoading] = useState<boolean>(false)
   const AlertFunction = useAlertFunction()
   const clientWidth = document.body.clientWidth;
   const setUserLogin = useSetRecoilState(userLogin)
-  console.log(isTriggerFetch);
+  const setSelectedFragment = useSetRecoilState(selectedFragment);
   
   useEffect(() => {
+    setSelectedFragment([])
+
     setIsLoading(true)
     if (isFragmentSearchState) {
       setFragmentStore([]);
@@ -42,6 +46,7 @@ export default function FragmentsList() {
   }, [fragmentSearchValues,activeCapsuleValue]);
 
   useEffect(() => {
+
     if (isTriggerFetch && !isFragmentSearchState) {
       const lastFetchFragment =
         fragmentStoreState[fragmentStoreState.length - 1];
@@ -50,7 +55,7 @@ export default function FragmentsList() {
       getFragments(endPoint);
     }
   }, [isTriggerFetch]);
-
+  
 
   async function getFragments(url: string) {
     try {
@@ -68,6 +73,7 @@ export default function FragmentsList() {
         setUserLogin(true)
       }
     } catch (error) {
+      setTriggerFetch(false);
       setIsLoading(false)
       if (axios.isAxiosError(error)) {
         const { status, response ,message} = error;
@@ -89,7 +95,7 @@ export default function FragmentsList() {
     }
   }
   function triggerfetch() {
-    if (scrollHeight.current) {
+    if (scrollHeight.current  && fragmentStoreState.length > 0) {
       const scrollTop = scrollHeight.current.scrollTop;
       const scrollHeightTotal = scrollHeight.current.scrollHeight;
       const clientHeight = scrollHeight.current.clientHeight;

@@ -6,21 +6,24 @@ import { activeCapsule, capsulesStore, searchValue, userLogin } from "../recoil/
 import ThreedotImg from "../component/ThreedotImg";
 import CapsuleName from "../component/CapsuleName";
 import CapsuleActionModal from "../component/CapsuleActionModal";
-import { useNavigate } from "react-router-dom";
+
 import useAlertFunction from "../hooks/AlertFunction";
 import Loader from "../component/Loader";
 import NoDataMessage from "../utils/NoDataMessage";
 
 export default function CapsulesList() {
-  const navigate = useNavigate();
-  const setActiveCapsule = useSetRecoilState(activeCapsule)
+  
+  const [activeCapsuleValue ,setActiveCapsule] = useRecoilState(activeCapsule)
   const AlertFunction = useAlertFunction();
   const [capsulesState, setCapsulesState] = useRecoilState(capsulesStore);
+  
   const [isTriggerFetch, setTriggerFetch] = useState<boolean>(false);
   const scrollHeight = useRef<HTMLDivElement | null>(null);
   const searchValueState = useRecoilValue(searchValue);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const setUserLogin = useSetRecoilState(userLogin);
+ 
+
   const folderColors = [
     "bg-green-300",
     "bg-blue-300",
@@ -46,6 +49,7 @@ export default function CapsulesList() {
   }, [isTriggerFetch]);
 
   async function fetchCapsules(dateModified: string | null | Date) {
+    console.log(capsulesState);
     try {
       const {
         data: { data },
@@ -153,33 +157,36 @@ export default function CapsulesList() {
         <Loader width={40} height={40} top={"50vh"} left={"50vw"} />
       ) : capsulesState.length ? (
         capsulesState.map((element, index) => {
-          const formatDateTime = (date: string | Date | null) => {
-            if (!date) return "";
-            const dateObj = date instanceof Date ? date : new Date(date);
-            return `${dateObj.toDateString()} ${
-              dateObj.toLocaleTimeString()
-            }`;
-          };
+          // const formatDateTime = (date: string | Date | null) => {
+          //   if (!date) return "";
+          //   const dateObj = date instanceof Date ? date : new Date(date);
+          //   return `${dateObj.toDateString()} ${
+          //     dateObj.toLocaleTimeString()
+          //   }`;
+          // };
           return (
+            <div key={element.capsule_id} className={`relative w-[100%] h-[15%] flex justify-around items-center shadow-md rounded-lg border border-gray-200 hover:shadow-lg transition duration-300 m-4 ${
+              folderColors[index % folderColors.length]
+            }  ${activeCapsuleValue == element.capsule_id ? 'border-2 border-red-500' : ''}`}>
+
             <div
             onClick={(e) => redirectFragmentPage(element.capsule_id, e)}
-              key={element.capsule_id}
-              className={`relative w-[100%] h-[15%] flex justify-between  shadow-md rounded-lg p-3 border border-gray-200 hover:shadow-lg transition duration-300 m-4 ${
-                folderColors[index % folderColors.length]
-              }`}
+              className="cursor-pointer w-[90%] h-[100%] flex items-center"
+              
             >
-             
               <CapsuleName
                 name={element.capsule_name}
                 capsuleid={element.capsule_id}
                 bgColor={folderColors[index % folderColors.length]}
               />
-               <ThreedotImg capsuleid={element.capsule_id} />
-               <CapsuleActionModal capsuleid={element.capsule_id} />
               {/* <div className="text-[12px]">
                 {formatDateTime(element.created_at)}
-              </div> */}
+                </div> */}
             </div>
+                <ThreedotImg capsuleid={element.capsule_id} />
+                <CapsuleActionModal capsuleid={element.capsule_id} />
+            </div>
+
           );
         })
       ) : (

@@ -128,9 +128,12 @@ export default function CapsuleName({
           onKeyDown={(e) => updateCapsuleNameOnEnter(e)}
         />
       ) : (
-        <div onClick={changeNode} id="namediv">
+        <div id="namediv">
           {changeName.substring(0, 20)}
         </div>
+        // <div onClick={changeNode} id="namediv">
+        //   {changeName.substring(0, 20)}
+        // </div>
       )}
     </div>
   );

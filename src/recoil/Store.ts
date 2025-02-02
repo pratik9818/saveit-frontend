@@ -99,3 +99,7 @@ export const selectedFragmentCountToUpload = atom<number>({
     key:'fragment file count',
     default:0
 })
+export const capsuleLayoutVisbility = atom<boolean>({
+    key:'hide and show capsule layout',
+    default:true
+})
