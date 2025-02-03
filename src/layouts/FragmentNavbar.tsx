@@ -7,7 +7,7 @@ import { capsuleLayoutVisbility } from "../recoil/Store";
 export default function FragmentNavbar() {
   const capsuleLayoutVisbilityValue = useRecoilValue(capsuleLayoutVisbility)
   return (
-    <div className="flex">
+    <div className="flex mt-1 justify-start items-center">
       { !capsuleLayoutVisbilityValue && <CapsuleLayoutVisbilityBtn/>}
     <ActiveCapsuleName/>
       <FragmentSearch/>

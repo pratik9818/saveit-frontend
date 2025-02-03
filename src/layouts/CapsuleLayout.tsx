@@ -8,7 +8,7 @@ export default function CapsuleLayout() {
 const capsuleLayoutVisible = useRecoilValue(capsuleLayoutVisbility)
 
   return capsuleLayoutVisible  && (
-    <div className="w-[30%]">
+    <div className="w-[40%]">
       <CapsuleNavbar />
         <CapsulesList />
       <FeedbackModal />

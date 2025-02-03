@@ -103,3 +103,8 @@ export const capsuleLayoutVisbility = atom<boolean>({
     key:'hide and show capsule layout',
     default:true
 })
+
+export const editCapsuleName_Id = atom<string | null>({
+    key:'edit capsule name id',
+    default:null
+})

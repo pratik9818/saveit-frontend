@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import CapsuleLayout from "../layouts/CapsuleLayout";
 import FragmentLayout from "../layouts/FragmentLayout";
+import CreateCapsuleModal from "../component/CreateCapsuleModal";
+import EditTextModal from "../component/EditTextModal";
+import ExpandNoteModal from "../component/ExpandNoteModal";
 export default function HomePage() {
   useEffect(()=>{
     document.title = "Saveit.tech - Organize your content neatly into capsules";
@@ -10,6 +13,9 @@ export default function HomePage() {
     <div className="flex w-[100%] h-[99vh]">
       <CapsuleLayout/>
       <FragmentLayout/>
+      <CreateCapsuleModal/>
+      {<EditTextModal/>}
+      {<ExpandNoteModal/>}
     </div>
   )
 }

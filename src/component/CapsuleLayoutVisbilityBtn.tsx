@@ -1,5 +1,6 @@
 import { useRecoilState } from "recoil"
 import { capsuleLayoutVisbility } from "../recoil/Store"
+import icons from "../utils/Icons"
 
 export default function CapsuleLayoutVisbilityBtn() {
     const [capsuleLayoutVisible,setCapsuleLayoutVisible] = useRecoilState(capsuleLayoutVisbility)
@@ -12,7 +13,8 @@ export default function CapsuleLayoutVisbilityBtn() {
     }
   return (
     <div onClick={hideandshow}>
-      {capsuleLayoutVisible ? 'Hide' : 'Show'}
+      {/* {capsuleLayoutVisible ? 'Hide' : 'Show'} */}
+      {<icons.capsuleListVisbilityIcon/>}
     </div>
   )
 }

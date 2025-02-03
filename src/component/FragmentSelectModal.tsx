@@ -67,7 +67,7 @@ export default function FragmentSelectModal() {
     setSelectedFragment([])
   }
   return selectedFragmentValue.length ? (
-    <div className="relative top-14 z-10 border bg-red-200 rounded-md w-[65%] h-12 mx-[15%] flex justify-between items-center">
+    <div className="absolute top-14 z-10 border bg-red-200 rounded-md w-[65%] h-12 mx-[15%] flex justify-between items-center">
       <div className="w-24 flex justify-between">
         <span className="ml-3 font-bold text-xl">
           {selectedFragmentValue.length}

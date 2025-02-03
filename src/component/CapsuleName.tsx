@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { API_VERSION, DOMAIN, errorRed, successGreen } from "../utils/Constant";
-import { useSetRecoilState } from "recoil";
-import { alertState, capsulesStore, isAlert } from "../recoil/Store";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { alertState, capsulesStore, editCapsuleName_Id, isAlert } from "../recoil/Store";
 import useAlertFunction from "../hooks/AlertFunction";
 export default function CapsuleName({
   name,
@@ -14,20 +14,14 @@ export default function CapsuleName({
   bgColor: string;
 }) {
   const AlertFunction = useAlertFunction();
-  const [isChangeNode, setChangeNode] = useState<boolean>(false);
+  // const [isChangeNode, setChangeNode] = useState<boolean>(false);
   const [changeName, setChangeName] = useState<string>(name);
   const setIsalert = useSetRecoilState(isAlert);
   const setAlertState = useSetRecoilState(alertState);
   const inputref = useRef<HTMLInputElement | null>(null);
   const setCapsulesState = useSetRecoilState(capsulesStore);
-  function changeNode() {
-    setChangeNode(true);
-  }
-  useEffect(() => {
-    if (inputref.current) {
-      inputref.current.focus();
-    }
-  }, [isChangeNode]);
+  const [editCapsuleName_IdValue ,setEditCapsuleName_Id] = useRecoilState(editCapsuleName_Id)
+
   function changeCapsuleName(e: React.ChangeEvent<HTMLInputElement>) {
     e.stopPropagation();
     setChangeName(e.target.value);
@@ -52,7 +46,6 @@ export default function CapsuleName({
       }
 
       if (name == changeName) {
-        setChangeNode(false);
         return;
       }
       const res = await axios.put(
@@ -69,6 +62,7 @@ export default function CapsuleName({
         status,
       } = res;
       if (status === 200) {
+        setEditCapsuleName_Id(null);
         setCapsulesState((prevCapsules) =>
           prevCapsules.map((capsule) =>
             capsule.capsule_id === capsuleid
@@ -76,7 +70,6 @@ export default function CapsuleName({
               : capsule
           )
         );
-        setChangeNode(false);
         AlertFunction(true, successGreen, message, 1000);
       }
     } catch (error) {
@@ -98,42 +91,40 @@ export default function CapsuleName({
       }
     }
   }
-  // useEffect(() => {
-  //   document.addEventListener("click", handleOutsideClick);
+  useEffect(() => {
+    if(inputref.current) {
+      inputref.current.focus();
+    }
+  }, [editCapsuleName_IdValue])
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+        const target = event.target as HTMLElement
+        if (!target.closest('.capsule-name-input')) {
+          setEditCapsuleName_Id(null)
+        }
+    }
 
-  //   return () => {
-  //     document.removeEventListener("click", handleOutsideClick);
-  //   };
-  // }, []);
-  // function handleOutsideClick(event: MouseEvent) {
-  //   const target = (event.target as HTMLDivElement).id;
-  //   console.log(isChangeNode);
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+        document.removeEventListener('mousedown', handleClickOutside)
+    }
+}, []) // Empty dependency array
 
-  //   if (target != 'namediv') {
-  //     // setChangeNode(false); // Close modal if clicked outside
-  //     // console.log('k');
-
-  //     updateCapsuleName()
-  //   }
-  // }
   return (
-    <div className='text-xl font-bold font-mono my-1 w-[80%]'>
-      {isChangeNode ? (
+    <div  className='text-xl font-bold font-mono my-1 w-[80%]'>
+      {editCapsuleName_IdValue === capsuleid ? (
         <input
-          className={`outline-none w-[100%] ${bgColor}`}
-          ref={inputref}
+        ref={inputref}
+          className={`capsule-name-input outline-none w-[100%] border border-red-500 ${bgColor}`}
           type="text"
           value={changeName}
           onChange={(e) => changeCapsuleName(e)}
           onKeyDown={(e) => updateCapsuleNameOnEnter(e)}
         />
       ) : (
-        <div id="namediv">
+        <div>
           {changeName.substring(0, 20)}
         </div>
-        // <div onClick={changeNode} id="namediv">
-        //   {changeName.substring(0, 20)}
-        // </div>
       )}
     </div>
   );

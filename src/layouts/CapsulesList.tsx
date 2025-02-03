@@ -49,7 +49,6 @@ export default function CapsulesList() {
   }, [isTriggerFetch]);
 
   async function fetchCapsules(dateModified: string | null | Date) {
-    console.log(capsulesState);
     try {
       const {
         data: { data },
@@ -150,11 +149,11 @@ export default function CapsulesList() {
   return (
     <div
       ref={scrollHeight}
-      className="h-[70%] flex flex-wrap overflow-y-scroll "
+      className="h-[70%] flex flex-col overflow-y-scroll "
       onScroll={triggerfetch}
     >
       {isLoading ? (
-        <Loader width={40} height={40} top={"50vh"} left={"50vw"} />
+        <Loader width={40} height={40} top={"50vh"} left={"12vw"} />
       ) : capsulesState.length ? (
         capsulesState.map((element, index) => {
           // const formatDateTime = (date: string | Date | null) => {
@@ -165,7 +164,7 @@ export default function CapsulesList() {
           //   }`;
           // };
           return (
-            <div key={element.capsule_id} className={`relative w-[100%] h-[15%] flex justify-around items-center shadow-md rounded-lg border border-gray-200 hover:shadow-lg transition duration-300 m-4 ${
+            <div key={element.capsule_id} className={`relative w-[90%] h-[15%] flex justify-around items-center shadow-md rounded-lg border border-gray-200 hover:shadow-lg transition duration-300 p-4 m-4 ${
               folderColors[index % folderColors.length]
             }  ${activeCapsuleValue == element.capsule_id ? 'border-2 border-red-500' : ''}`}>
 

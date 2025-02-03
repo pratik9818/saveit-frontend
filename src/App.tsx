@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; //wha
 import LoginPage from "./pages/LoginPage";
 import Alert from "./utils/Alert";
 // import CapsulePage from "./pages/CapsulePage";
-import CreateCapsuleModal from "./component/CreateCapsuleModal";
 import LandingPage from "./pages/LandingPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
@@ -11,7 +10,6 @@ import HomePage from "./pages/HomePage";
 function App() {
   return (
     <div >
-      <CreateCapsuleModal/>
       <Alert />
       <Router>
         <Routes>
