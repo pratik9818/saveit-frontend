@@ -4,6 +4,7 @@ import FragmentLayout from "../layouts/FragmentLayout";
 import CreateCapsuleModal from "../component/CreateCapsuleModal";
 import EditTextModal from "../component/EditTextModal";
 import ExpandNoteModal from "../component/ExpandNoteModal";
+import FeedbackModal from "../component/FeedbackModal";
 export default function HomePage() {
   useEffect(()=>{
     document.title = "Saveit.tech - Organize your content neatly into capsules";
@@ -14,8 +15,10 @@ export default function HomePage() {
       <CapsuleLayout/>
       <FragmentLayout/>
       <CreateCapsuleModal/>
-      {<EditTextModal/>}
-      {<ExpandNoteModal/>}
+      <EditTextModal/>
+      <ExpandNoteModal/>
+      <FeedbackModal/>
+
     </div>
   )
 }

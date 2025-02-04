@@ -108,3 +108,7 @@ export const editCapsuleName_Id = atom<string | null>({
     key:'edit capsule name id',
     default:null
 })
+export const isUserProfileModalOpen = atom<boolean>({
+    key:'user profile modal',
+    default:false
+})

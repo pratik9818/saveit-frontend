@@ -8,5 +8,5 @@ export default function CreateCapsuleBtn() {
   function showmodal(){
     setIsModalopen(true)
   }
-  return <button className={`w-auto flex text-white px-4 py-2 mr-auto rounded-lg shadow-md transition duration-300 ${buttonBg}`}onClick={showmodal}>{<icons.newCapsuleIcon/>}Add Capsule</button>
+  return <button className={`w-auto flex text-white px-[8px] py-2 mr-auto rounded-lg shadow-md transition duration-300 ${buttonBg}`}onClick={showmodal}>{<icons.newCapsuleIcon/>}Add Capsule</button>
 }

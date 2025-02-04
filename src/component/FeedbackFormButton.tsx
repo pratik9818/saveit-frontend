@@ -7,5 +7,5 @@ export default function FeedbackFormButton() {
     function openFeedbackForm(){
         setOpenModal(true)
     }
-  return <button onClick={openFeedbackForm} className={`w-full md:w-auto text-white px-4 py-2 rounded-lg shadow-md mr-3 ${buttonBg}`}>FeedBack</button>
+  return <button onClick={openFeedbackForm} className={`w-[90px] text-white px-2 py-1 rounded-sm shadow-md ${buttonBg}`}>FeedBack</button>
 }

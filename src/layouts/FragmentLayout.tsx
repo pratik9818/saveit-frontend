@@ -6,6 +6,7 @@ import FragmentSelectModal from "../component/FragmentSelectModal"
 import FragmentUploadStatus from "../component/FragmentUploadStatus"
 import FragmentsList from "./FragmentsList"
 import FragmentNavbar from "./FragmentNavbar"
+import DefaultPage from "../pages/DefaultPage"
 
 export default function FragmentLayout() {
     const activeCapsuleValue = useRecoilValue(activeCapsule)
@@ -36,7 +37,7 @@ export default function FragmentLayout() {
       window.removeEventListener("paste", handlePaste);
     };
   }, []);
-  return activeCapsuleValue && (
+  return activeCapsuleValue ? (
     <div className={`relative h-[100%] w-[100%] flex flex-col bg-gray-100`}>
       <FragmentNavbar/>
      <FragmentSelectModal/>
@@ -45,5 +46,5 @@ export default function FragmentLayout() {
      <FragmentUpload/>
     
     </div>
-  )
+  ) :<DefaultPage/>
 }

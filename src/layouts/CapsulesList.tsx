@@ -2,27 +2,29 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { API_VERSION, DOMAIN, errorRed } from "../utils/Constant";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { activeCapsule, capsulesStore, searchValue, userLogin } from "../recoil/Store";
+import {
+  activeCapsule,
+  capsulesStore,
+  searchValue,
+  userLogin,
+} from "../recoil/Store";
 import ThreedotImg from "../component/ThreedotImg";
 import CapsuleName from "../component/CapsuleName";
 import CapsuleActionModal from "../component/CapsuleActionModal";
 
 import useAlertFunction from "../hooks/AlertFunction";
 import Loader from "../component/Loader";
-import NoDataMessage from "../utils/NoDataMessage";
 
 export default function CapsulesList() {
-  
-  const [activeCapsuleValue ,setActiveCapsule] = useRecoilState(activeCapsule)
+  const [activeCapsuleValue, setActiveCapsule] = useRecoilState(activeCapsule);
   const AlertFunction = useAlertFunction();
   const [capsulesState, setCapsulesState] = useRecoilState(capsulesStore);
-  
+
   const [isTriggerFetch, setTriggerFetch] = useState<boolean>(false);
   const scrollHeight = useRef<HTMLDivElement | null>(null);
   const searchValueState = useRecoilValue(searchValue);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const setUserLogin = useSetRecoilState(userLogin);
- 
 
   const folderColors = [
     "bg-green-300",
@@ -142,7 +144,7 @@ export default function CapsulesList() {
     e: React.MouseEvent<HTMLDivElement>
   ) {
     e.stopPropagation();
-    setActiveCapsule(capsuleid)
+    setActiveCapsule(capsuleid);
 
     // navigate(`/app/fragment/${capsuleid}`);
   }
@@ -164,32 +166,36 @@ export default function CapsulesList() {
           //   }`;
           // };
           return (
-            <div key={element.capsule_id} className={`relative w-[90%] h-[15%] flex justify-around items-center shadow-md rounded-lg border border-gray-200 hover:shadow-lg transition duration-300 p-4 m-4 ${
-              folderColors[index % folderColors.length]
-            }  ${activeCapsuleValue == element.capsule_id ? 'border-2 border-red-500' : ''}`}>
-
             <div
-            onClick={(e) => redirectFragmentPage(element.capsule_id, e)}
-              className="cursor-pointer w-[90%] h-[100%] flex items-center"
-              
+              key={element.capsule_id}
+              className={`relative w-[90%] h-[15%] flex justify-around items-center shadow-md rounded-lg border border-gray-200 hover:shadow-lg transition duration-300 p-4 m-4 ${
+                folderColors[index % folderColors.length]
+              }  ${
+                activeCapsuleValue == element.capsule_id
+                  ? "border-2 border-red-500"
+                  : ""
+              }`}
             >
-              <CapsuleName
-                name={element.capsule_name}
-                capsuleid={element.capsule_id}
-                bgColor={folderColors[index % folderColors.length]}
-              />
-              {/* <div className="text-[12px]">
+              <div
+                onClick={(e) => redirectFragmentPage(element.capsule_id, e)}
+                className="cursor-pointer w-[90%] h-[100%] flex items-center"
+              >
+                <CapsuleName
+                  name={element.capsule_name}
+                  capsuleid={element.capsule_id}
+                  bgColor={folderColors[index % folderColors.length]}
+                />
+                {/* <div className="text-[12px]">
                 {formatDateTime(element.created_at)}
                 </div> */}
+              </div>
+              <ThreedotImg capsuleid={element.capsule_id} />
+              <CapsuleActionModal capsuleid={element.capsule_id} />
             </div>
-                <ThreedotImg capsuleid={element.capsule_id} />
-                <CapsuleActionModal capsuleid={element.capsule_id} />
-            </div>
-
           );
         })
       ) : (
-        <NoDataMessage messageType={"Capsules"} />
+        <h2 className="text-center mt-28 font-bold">Create Capsule</h2>
       )}
     </div>
   );
