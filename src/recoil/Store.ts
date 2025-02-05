@@ -99,3 +99,16 @@ export const selectedFragmentCountToUpload = atom<number>({
     key:'fragment file count',
     default:0
 })
+export const capsuleLayoutVisbility = atom<boolean>({
+    key:'hide and show capsule layout',
+    default:true
+})
+
+export const editCapsuleName_Id = atom<string | null>({
+    key:'edit capsule name id',
+    default:null
+})
+export const isUserProfileModalOpen = atom<boolean>({
+    key:'user profile modal',
+    default:false
+})

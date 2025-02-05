@@ -1,28 +1,16 @@
-import {useParams } from "react-router-dom"
-import FragmentSearch from "../component/FragmentSearch"
 import FragmentUpload from "../component/FragmentUpload"
-import { useSetRecoilState } from "recoil"
-import { activeCapsule, screenShot, selectedFragment } from "../recoil/Store"
-import Fragments from "../component/Fragments"
-import EditTextModal from "../component/EditTextModal"
-import ExpandNoteModal from "../component/ExpandNoteModal"
+import { useRecoilValue, useSetRecoilState } from "recoil"
+import { activeCapsule, screenShot } from "../recoil/Store"
 import { useEffect } from "react"
 import FragmentSelectModal from "../component/FragmentSelectModal"
-import FragmentUploadStatus from "../component/FragmentUploadStatus"
+import FragmentsList from "./FragmentsList"
+import FragmentNavbar from "./FragmentNavbar"
+import DefaultPage from "../pages/DefaultPage"
 
 export default function FragmentLayout() {
-  const {capsuleid} = useParams()
-  const setSelectedFragment = useSetRecoilState(selectedFragment);
-  useEffect(()=>{
-    document.title = "Saveit.tech - Save all type of digital content";
-
-    setSelectedFragment([])
-  },[])
-  
-    const setActiveCapsule = useSetRecoilState(activeCapsule)
+    const activeCapsuleValue = useRecoilValue(activeCapsule)
     const setScreenShot = useSetRecoilState(screenShot)
-    if(capsuleid) setActiveCapsule(capsuleid)
-      
+  
   useEffect(() => {
     const handlePaste = (e: ClipboardEvent) => {
       const items = e.clipboardData?.items;
@@ -48,15 +36,13 @@ export default function FragmentLayout() {
       window.removeEventListener("paste", handlePaste);
     };
   }, []);
-  return (
-    <div className={`h-[99vh] flex justify-between flex-col bg-gray-100`}>
-     <FragmentSearch/>
+  return activeCapsuleValue ? (
+    <div className={`relative h-[100%] w-[100%] flex flex-col bg-gray-100`}>
+      <FragmentNavbar/>
      <FragmentSelectModal/>
-     <FragmentUploadStatus/>
-     <Fragments/>
+    <FragmentsList/>
      <FragmentUpload/>
-     {<EditTextModal/>}
-     {<ExpandNoteModal/>}
+    
     </div>
-  )
+  ) :<DefaultPage/>
 }

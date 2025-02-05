@@ -10,7 +10,7 @@ export default function ExpandNoteModal() {
   }
   return (
     expandNoteModalValue && (
-      <div className="bg-gray-50 absolute top-0 w-[100vw] h-[100vh] flex border justify-center p-8 z-20" id="expandModal" onClick={hidemodal}>
+      <div className="bg-gray-50 absolute top-0 w-[100vw] h-[100vh] flex border justify-center p-8 z-50" id="expandModal" onClick={hidemodal}>
         <NoteInput textareaHeight={'90%'} postion={'flex-col'}/>
       </div>
     )

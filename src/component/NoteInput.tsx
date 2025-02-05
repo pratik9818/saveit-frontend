@@ -109,6 +109,7 @@ export default function NoteInput({
           
         }
       } catch (error) {
+        setSelectedFragmentCount(0);
         setFragmentStore((prevStore) =>
           prevStore.filter((fragment) => fragment.fragment_id !== tempId)
         );

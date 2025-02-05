@@ -73,7 +73,7 @@ export default function CreateCapsuleModal() {
   return (
     isModalOpen && (
       <div
-        className="bg-transparent absolute h-[100vh] w-[100vw] flex justify-center items-center"
+        className="bg-transparent absolute h-[100vh] w-[100vw] inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
         onClick={(e) => hidemodal(e)}
         id="modal"
       >

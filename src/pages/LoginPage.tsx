@@ -19,7 +19,7 @@ export default function LoginPage() {
   const navigate = useNavigate()
   useEffect(() => {
     if(localStorage.getItem("is_user_login") === "true"){
-      navigate('/app/capsules')
+      navigate('/app/home')
     }
       document.title = "Saveit.tech - Sign in using google";
   }, [])
@@ -34,7 +34,7 @@ export default function LoginPage() {
         );
         if (status === 200 || status === 201) {
           setUserLogin(true)
-          navigate('/app/capsules')
+          navigate('/app/home')
           AlertFunction(true, successGreen, message, 1000);
           setIsLoading(false)
            localStorage.setItem("is_user_login", "true")

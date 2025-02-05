@@ -1,5 +1,5 @@
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { capsuleActionModalId, capsulesStore } from "../recoil/Store";
+import { activeCapsule, capsuleActionModalId, capsulesStore } from "../recoil/Store";
 import axios from "axios";
 import { API_VERSION, DOMAIN, errorRed, successGreen } from "../utils/Constant";
 import { useState } from "react";
@@ -8,6 +8,7 @@ import useAlertFunction from "../hooks/AlertFunction";
 export default function CapsuleDelete() {
   const setCapsulesState = useSetRecoilState(capsulesStore);
   // const capsuleActionModalIdValue = useRecoilValue(capsuleActionModalId)
+  const [activeCapsuleValue,setActiveCapsule] = useRecoilState(activeCapsule);
   const [capsuleActionModalIdValue, setCapsuleActionModalId] =
     useRecoilState(capsuleActionModalId);
   const AlertFunction = useAlertFunction();
@@ -31,6 +32,10 @@ export default function CapsuleDelete() {
             (capsule) => capsule.capsule_id !== capsuleActionModalIdValue
           )
         );
+        const isthisActiveCapulse = capsuleActionModalIdValue == activeCapsuleValue
+        if(isthisActiveCapulse){
+          setActiveCapsule(null)
+        }
         AlertFunction(true, successGreen, "Deleted", 1000);
       }
       setLoading(false);
@@ -55,7 +60,7 @@ export default function CapsuleDelete() {
     }
   }
   return (
-    <button className="bg-red-400 p-[4px] rounded-md w-[90%] absolute top-2" onClick={deletecapsule}>
+    <button className="bg-gray-200 p-[4px] rounded-md w-[90%]" onClick={deletecapsule}>
       {!loading ? "Delete" : "Deleting.."}
     </button>
   );

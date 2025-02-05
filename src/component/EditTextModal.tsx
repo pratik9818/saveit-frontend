@@ -17,7 +17,7 @@ export default function EditTextModal() {
     isEditTextModalOpenState && (
       <div
         onClick={(e) => hideModal(e)}
-        className="bg-gray-100 absolute w-[100vw] h-[100vh] z-20"
+        className="bg-gray-100 absolute w-[100vw] h-[100vh] z-50"
         id="textModal"
       >
         <EditFragmentText />

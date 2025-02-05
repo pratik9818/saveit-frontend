@@ -6,5 +6,5 @@ export default function ThreedotImg({capsuleid}:{capsuleid:string}) {
   function showAction(){
     setCapsuleActionModalId(capsuleActionModalIdvalue === capsuleid ? null : capsuleid);
   }
-  return <div className="cursor-pointer" onClick={showAction}>. . .</div>
+  return <div className="three-dot-icon cursor-pointer" onClick={showAction}>. . .</div>
 }

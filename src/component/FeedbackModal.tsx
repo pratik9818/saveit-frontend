@@ -73,7 +73,7 @@ export default function FeedbackModal() {
         }
       }
   return hide &&(
-    <div id="feedbackModal" className="bg-gray-100 absolute w-[100vw] h-[98vh] top-0 flex justify-center items-center min-h-screen" onClick={(e)=>toogleModal(e)}>
+    <div id="feedbackModal" className="bg-gray-100 absolute z-50 w-[100vw] h-[98vh] top-0 flex justify-center items-center min-h-screen" onClick={(e)=>toogleModal(e)}>
       <form
         onSubmit={handleSubmit}
         className="bg-white p-2 rounded-lg shadow-lg w-full max-w-md h-auto lg:h-[100%]"
