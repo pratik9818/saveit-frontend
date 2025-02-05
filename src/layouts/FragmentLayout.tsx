@@ -3,7 +3,6 @@ import { useRecoilValue, useSetRecoilState } from "recoil"
 import { activeCapsule, screenShot } from "../recoil/Store"
 import { useEffect } from "react"
 import FragmentSelectModal from "../component/FragmentSelectModal"
-import FragmentUploadStatus from "../component/FragmentUploadStatus"
 import FragmentsList from "./FragmentsList"
 import FragmentNavbar from "./FragmentNavbar"
 import DefaultPage from "../pages/DefaultPage"
@@ -41,7 +40,6 @@ export default function FragmentLayout() {
     <div className={`relative h-[100%] w-[100%] flex flex-col bg-gray-100`}>
       <FragmentNavbar/>
      <FragmentSelectModal/>
-     <FragmentUploadStatus/>
     <FragmentsList/>
      <FragmentUpload/>
     

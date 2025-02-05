@@ -10,23 +10,15 @@ import UserProfileModal from "../component/UserProfileModal";
 
 export default function CapsuleNavbar() {
   return (
-    <div className="relative flex flex-col justify-between items-center p-2 h-40">
-     <CapsuleTopNav />
-    <CapsuleSearch/>
-    <CreateCapsuleBtn/>
-    <UserProfileModal/>
-
-    {/* <div className="grid grid-cols-2 gap-2 w-full md:flex md:gap-4 md:w-auto">
-      <div className="col-span-2 md:col-span-1">
-        <CreateCapsuleBtn/>
-      </div>
-      <div className="md:col-span-1">
-        <FeedbackFormButton/>
-      </div>
-      <div className="md:col-span-1">
-        <LogoutButton/>
-      </div>
-    </div> */}
+    <div className="relative flex flex-col justify-between items-center p-1 h-auto md:h-40">
+    <CapsuleTopNav />
+    <div className="w-full max-w-md">
+      <CapsuleSearch />
+    </div>
+    <div className="w-full flex justify-center mt-2">
+      <CreateCapsuleBtn />
+    </div>
+    <UserProfileModal />
   </div>
   )
 }

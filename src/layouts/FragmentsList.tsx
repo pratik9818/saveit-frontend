@@ -108,7 +108,7 @@ export default function FragmentsList() {
     }
   }
   return isLoading ? (
-    <Loader width={40} height={40} top={'50vh'} left={'30vw'}/>
+    <Loader width={40} height={40} top={'50vh'} left={'50vw'}/>
   ) : (
     <div
       className="h-[80%] overflow-y-scroll relative flex flex-col-reverse"

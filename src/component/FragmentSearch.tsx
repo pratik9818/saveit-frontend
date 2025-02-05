@@ -33,7 +33,7 @@ export default function FragmentSearch() {
         type="text"
         onChange={(e) => searching(e)}
         placeholder="Search fragment by tag , file name and text content"
-        className="w-full md:max-w-[45%] border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black p-2"
+        className="w-[99%] md:w-[70%] md:mr-1 border border-gray-300 rounded-md shadow-sm focus:outline-none p-2"
       />
   );
 }

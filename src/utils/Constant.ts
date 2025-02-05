@@ -1,7 +1,7 @@
 export const GOOGLE_CLIENT_ID = "935756544201-5q3i79vmjmgug22rtj7p7bgt8hh17uhn.apps.googleusercontent.com";
 export const API_VERSION = "v1";
-// export const DOMAIN = "https://server.saveit.tech";
-export const DOMAIN = "http://localhost:3001";
+export const DOMAIN = "https://server.saveit.tech";
+// export const DOMAIN = "http://localhost:3001";
 export const successGreen = "bg-emerald-400";
 export const errorRed = "bg-rose-400";
 export const capsuleFiltersStore = {
@@ -60,6 +60,6 @@ export const fragmentDimensionBelow700px = [
   },
 ];
 
-export const breakFragmentPixel = 640 
+export const breakFragmentPixel = 760 
 export const buttonBg = 'bg-gradient-to-r from-blue-500 via-purple-500 to-purple-700'
 export const frgamentBg = 'bg-gradient-to-br from-blue-600 to-purple-800'

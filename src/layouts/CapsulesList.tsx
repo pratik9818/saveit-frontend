@@ -151,11 +151,11 @@ export default function CapsulesList() {
   return (
     <div
       ref={scrollHeight}
-      className="h-[70%] flex flex-col overflow-y-scroll "
+      className="h-[60vh] md:h-[70%] flex flex-col overflow-y-scroll"
       onScroll={triggerfetch}
     >
       {isLoading ? (
-        <Loader width={40} height={40} top={"50vh"} left={"12vw"} />
+        <Loader width={40} height={40} top={"50vh"} left={"50%"} />
       ) : capsulesState.length ? (
         capsulesState.map((element, index) => {
           // const formatDateTime = (date: string | Date | null) => {
@@ -168,17 +168,17 @@ export default function CapsulesList() {
           return (
             <div
               key={element.capsule_id}
-              className={`relative w-[90%] h-[15%] flex justify-around items-center shadow-md rounded-lg border border-gray-200 hover:shadow-lg transition duration-300 p-4 m-4 ${
+              className={`relative w-[90%] h-[20%] md:[25%] flex justify-around items-center shadow-md rounded-lg border border-gray-200 hover:shadow-lg transition duration-300 p-3 md:p-4 m-2 ${
                 folderColors[index % folderColors.length]
               }  ${
                 activeCapsuleValue == element.capsule_id
-                  ? "border-2 border-red-500"
+                  ? "border border-gray-950"
                   : ""
               }`}
             >
               <div
                 onClick={(e) => redirectFragmentPage(element.capsule_id, e)}
-                className="cursor-pointer w-[90%] h-[100%] flex items-center"
+                className="cursor-pointer w-[90%] flex items-center"
               >
                 <CapsuleName
                   name={element.capsule_name}

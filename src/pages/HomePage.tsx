@@ -11,14 +11,13 @@ export default function HomePage() {
 },[])
 
   return (
-    <div className="flex w-[100%] h-[99vh]">
+    <div className="flex flex-col md:flex-row w-full h-[99vh]">
       <CapsuleLayout/>
       <FragmentLayout/>
       <CreateCapsuleModal/>
       <EditTextModal/>
       <ExpandNoteModal/>
       <FeedbackModal/>
-
     </div>
   )
 }

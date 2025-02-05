@@ -111,11 +111,11 @@ export default function CapsuleName({
 }, []) // Empty dependency array
 
   return (
-    <div  className='text-xl font-bold font-mono my-1 w-[80%]'>
+    <div  className='text-xl font-bold font-mono w-[80%]'>
       {editCapsuleName_IdValue === capsuleid ? (
         <input
         ref={inputref}
-          className={`capsule-name-input outline-none w-[100%] border border-red-500 ${bgColor}`}
+          className={`capsule-name-input outline-none w-[100%] border border-gray-500 ${bgColor}`}
           type="text"
           value={changeName}
           onChange={(e) => changeCapsuleName(e)}
