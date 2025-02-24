@@ -5,6 +5,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   activeCapsule,
   capsulesStore,
+  fragmentStore,
   searchValue,
   userLogin,
 } from "../recoil/Store";
@@ -19,7 +20,7 @@ export default function CapsulesList() {
   const [activeCapsuleValue, setActiveCapsule] = useRecoilState(activeCapsule);
   const AlertFunction = useAlertFunction();
   const [capsulesState, setCapsulesState] = useRecoilState(capsulesStore);
-
+  const setFragmentStore = useSetRecoilState(fragmentStore); 
   const [isTriggerFetch, setTriggerFetch] = useState<boolean>(false);
   const scrollHeight = useRef<HTMLDivElement | null>(null);
   const searchValueState = useRecoilValue(searchValue);
@@ -144,9 +145,9 @@ export default function CapsulesList() {
     e: React.MouseEvent<HTMLDivElement>
   ) {
     e.stopPropagation();
+    setFragmentStore([])
     setActiveCapsule(capsuleid);
 
-    // navigate(`/app/fragment/${capsuleid}`);
   }
   return (
     <div
@@ -168,7 +169,7 @@ export default function CapsulesList() {
           return (
             <div
               key={element.capsule_id}
-              className={`relative w-[90%] h-[20%] md:[25%] flex justify-around items-center shadow-md rounded-lg border border-gray-200 hover:shadow-lg transition duration-300 p-3 md:p-4 m-2 ${
+              className={`relative w-[90%] flex justify-around items-center shadow-md rounded-lg border border-gray-200 hover:shadow-lg transition duration-300 m-2 px-1 ${
                 folderColors[index % folderColors.length]
               }  ${
                 activeCapsuleValue == element.capsule_id
@@ -178,7 +179,7 @@ export default function CapsulesList() {
             >
               <div
                 onClick={(e) => redirectFragmentPage(element.capsule_id, e)}
-                className="cursor-pointer w-[90%] flex items-center"
+                className="cursor-pointer w-[90%] h-[70px] flex items-center "
               >
                 <CapsuleName
                   name={element.capsule_name}

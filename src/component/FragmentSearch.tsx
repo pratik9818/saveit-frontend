@@ -6,7 +6,7 @@ export default function FragmentSearch() {
   const setIsFragmentSearch = useSetRecoilState(isFragmentSearch);
     const [selectedFragmentValue ,setSelectedFragment] = useRecoilState(selectedFragment);
  
-  const updateTime = 700;
+  const updateTime = 600;
   const [typing, setTyping] = useState<NodeJS.Timeout | null>(null);
 
   function searching(e: React.ChangeEvent<HTMLInputElement>) {
