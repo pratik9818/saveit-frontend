@@ -2,7 +2,12 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { API_VERSION, DOMAIN, errorRed, successGreen } from "../utils/Constant";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { alertState, capsulesStore, editCapsuleName_Id, isAlert } from "../recoil/Store";
+import {
+  alertState,
+  capsulesStore,
+  editCapsuleName_Id,
+  isAlert,
+} from "../recoil/Store";
 import useAlertFunction from "../hooks/AlertFunction";
 export default function CapsuleName({
   name,
@@ -20,7 +25,8 @@ export default function CapsuleName({
   const setAlertState = useSetRecoilState(alertState);
   const inputref = useRef<HTMLInputElement | null>(null);
   const setCapsulesState = useSetRecoilState(capsulesStore);
-  const [editCapsuleName_IdValue ,setEditCapsuleName_Id] = useRecoilState(editCapsuleName_Id)
+  const [editCapsuleName_IdValue, setEditCapsuleName_Id] =
+    useRecoilState(editCapsuleName_Id);
 
   function changeCapsuleName(e: React.ChangeEvent<HTMLInputElement>) {
     e.stopPropagation();
@@ -80,7 +86,7 @@ export default function CapsuleName({
             true,
             errorRed,
             "Something went wrong ! please try again",
-          2000
+            2000
           );
           return;
         } else if (message == "Network Error") {
@@ -92,29 +98,29 @@ export default function CapsuleName({
     }
   }
   useEffect(() => {
-    if(inputref.current) {
+    if (inputref.current) {
       inputref.current.focus();
     }
-  }, [editCapsuleName_IdValue])
+  }, [editCapsuleName_IdValue]);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-        const target = event.target as HTMLElement
-        if (!target.closest('.capsule-name-input')) {
-          setEditCapsuleName_Id(null)
-        }
-    }
+      const target = event.target as HTMLElement;
+      if (!target.closest(".capsule-name-input")) {
+        setEditCapsuleName_Id(null);
+      }
+    };
 
-    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-        document.removeEventListener('mousedown', handleClickOutside)
-    }
-}, []) // Empty dependency array
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []); // Empty dependency array
 
   return (
-    <div  className='text-xl font-bold font-mono w-[80%]'>
+    <div className="text-xl font-bold font-mono w-[80%]">
       {editCapsuleName_IdValue === capsuleid ? (
         <input
-        ref={inputref}
+          ref={inputref}
           className={`capsule-name-input outline-none w-[100%] border border-gray-500 ${bgColor}`}
           type="text"
           value={changeName}
@@ -122,9 +128,7 @@ export default function CapsuleName({
           onKeyDown={(e) => updateCapsuleNameOnEnter(e)}
         />
       ) : (
-        <div>
-          {changeName.substring(0, 20)}
-        </div>
+        <div>{changeName.substring(0, 20)}</div>
       )}
     </div>
   );

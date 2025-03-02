@@ -3,7 +3,7 @@ import { searchValue } from "../recoil/Store";
 import { useState } from "react";
 
 export default function CapsuleSearch() {
-  const updateTime = 1000;
+  const updateTime = 500;
   const [typing, setTyping] = useState<NodeJS.Timeout | null>(null);
   const setSearchValue = useSetRecoilState(searchValue);
 
