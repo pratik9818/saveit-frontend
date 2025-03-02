@@ -1,3 +1,129 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.main-heading {
+    color: #f35626;
+    background-image: linear-gradient(45deg, #9200e0, #fe3a94);
+    background-clip: text;
+    animation: hue 10s infinite linear;
+    background-image: -webkit-linear-gradient(45deg, #9200e0, #fe3a94);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-animation: hue 10s infinite linear;
+}
+
+.text__head__main {
+    width: 700px;
+    margin: auto;
+}
+
+.c-box {
+    text-decoration: none;
+    color: #2d2d2d !important;
+    background: white;
+    border: 4px solid #00000024;
+    background: white;
+    display: block;
+    padding: 20px;
+    border-radius: 9px;
+    transition: 0.5s;
+}
+
+
+.c-box:hover {
+    box-shadow: 5px 5px 0px 0px #2d2d2d;
+    transform: translate(-4px, -4px);
+}
+
+
+
+.sw-btn {
+    color: #000;
+    background: #fff;
+    border: 4px solid #000000;
+    font-size: 14px;
+    padding: 9px 18px !important;
+    border-radius: 30px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+    transition: 0.25s;
+}
+
+.sw-btn:hover {
+    color: #000;
+    transform: translateY(-2px);
+    box-shadow: 5px 5px 0px 0px rgb(0, 0, 0);
+}
+
+
+@keyframes hue {
+    from {
+        filter: hue-rotate(0deg);
+    }
+
+    to {
+        filter: hue-rotate(-360deg);
+    }
+}
+
+@-webkit-keyframes hue {
+    from {
+        -webkit-filter: hue-rotate(0deg);
+    }
+
+    to {
+        -webkit-filter: hue-rotate(-360deg);
+    }
+
+}
+
+
+.caption {
+    letter-spacing: 0.25px;
+}
+
+
+.footer-section {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    background-image: url(/assets/footer.png);
+    background-color: transparent;
+    background-size: cover;
+    background-position: top;
+}
+
+.footer-main {
+    padding: 140px 0 0;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+}
+
+
+.footer-widget li {
+    display: inline-block;
+    margin-bottom: 0;
+}
+
+.footer-widget ul li a {
+    padding-left: 25px;
+    transition: all .3s ease;
+}
+
+.footer-widget li a,
+.footer-widget li a:hover {
+    margin-left: 0;
+    font-size: 13.5px;
+    color: #4b262d;
+    background: none;
+    text-decoration: none;
+}
+
+.footer_logo_secc{
+    border-bottom: 1px solid #dfe0ee;
+    padding-bottom: 30px;
+    margin-right: 0;
+    margin-left: 0
+}
