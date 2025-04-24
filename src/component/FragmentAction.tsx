@@ -2,7 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { fragmentType } from "../types/Types";
 import FragmentAboutModal from "./FragmentAboutModal";
 import axios from "axios";
-import { API_VERSION, DOMAIN, errorRed, successGreen } from "../utils/Constant";
+import {
+  API_VERSION,
+  DOMAIN,
+  errorRed,
+  imageExtensions,
+  successGreen,
+  videoExtensions,
+} from "../utils/Constant";
 import {
   activeFrgamentText,
   fragmentStore,
@@ -12,6 +19,8 @@ import { useSetRecoilState } from "recoil";
 import useAlertFunction from "../hooks/AlertFunction";
 import icons from "../utils/Icons";
 import CopyText from "./CopyText";
+import { useDownloadFile } from "../utils/DownloadFiles";
+import { calFragmentSize } from "../utils/CalFragmentSize";
 
 interface fragmentActionProps {
   fragmentdetails: fragmentType;
@@ -19,6 +28,7 @@ interface fragmentActionProps {
 export default function FragmentAction({
   fragmentdetails,
 }: fragmentActionProps) {
+  const { handleDownload } = useDownloadFile();
   const setFragmentStore = useSetRecoilState(fragmentStore);
   const AlertFunction = useAlertFunction();
   const [hideFragmentAbout, setHideFragmentAbout] = useState<boolean>(false);
@@ -106,6 +116,42 @@ export default function FragmentAction({
     setActiveEditFragmentTextId(fragmentdetails.fragment_id);
     setIsEditTextModalOpen(true);
   }
+  function checkImage$videoMedia() {
+    if (
+      imageExtensions.includes(fragmentdetails.fragment_type) ||
+      videoExtensions.includes(fragmentdetails.fragment_type) ||
+      fragmentdetails.fragment_type === "image" ||
+      fragmentdetails.fragment_type === "video"
+    ) {
+      const fileDetails = {
+        fragment_id: fragmentdetails.fragment_id,
+        url: fragmentdetails.url || undefined,
+        file_name: fragmentdetails.file_name || undefined,
+      };
+      return (
+        <div className="flex items-center justify-between w-[100%]">
+          <div onClick={() => handleDownload(fileDetails)}>
+            <icons.DownloadIcon />
+          </div>
+          <div className="flex items-center mt-1 text-sm text-gray-600">
+            <span>{calFragmentSize(fragmentdetails.size)}</span>
+            <span className="mx-2">•</span>
+            <span>{fragmentdetails.fragment_type}</span>
+          </div>
+        </div>
+      );
+    } else if (fragmentdetails.fragment_type === "text") {
+      const fileDetails = {
+        fragment_id: fragmentdetails.fragment_id,
+        text_content: fragmentdetails.text_content || undefined,
+      };
+      return (
+        <div onClick={() => handleDownload(fileDetails)}>
+          <icons.DownloadIcon />
+        </div>
+      );
+    }
+  }
 
   return editTag ? (
     <input
@@ -135,6 +181,8 @@ export default function FragmentAction({
       {hideFragmentAbout && (
         <FragmentAboutModal fragmentdetails={fragmentdetails} />
       )}
+      {checkImage$videoMedia()}
+
       {fragmentdetails.fragment_type === "text" && (
         <CopyText textToCopy={fragmentdetails.text_content} />
       )}

@@ -53,7 +53,6 @@ export default function NoteInput({
       setSelectedFragmentCount(0)
       setUploadedFragmentCount(0)
       setSelectedFragmentCount(1);
-
       storeEnterKey = [];
       const tempId = `temp-${Date.now()}`;
       const newTextFragment = {
@@ -114,7 +113,6 @@ export default function NoteInput({
           prevStore.filter((fragment) => fragment.fragment_id !== tempId)
         );
         setUploadedFragmentCount(0);
-
 
         if (axios.isAxiosError(error)) {
           const { status, response, message } = error;

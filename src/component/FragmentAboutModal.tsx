@@ -5,7 +5,6 @@ import { API_VERSION, DOMAIN, errorRed, successGreen } from "../utils/Constant";
 import axios from "axios";
 import useAlertFunction from "../hooks/AlertFunction";
 import { useEffect, useState } from "react";
-import downloadFile from "../utils/DownloadFiles";
 
 interface fragmentActionProps {
     fragmentdetails: fragmentType;
@@ -68,64 +67,13 @@ export default function FragmentAboutModal({fragmentdetails}:fragmentActionProps
     }
   }
 
-  async function checkDownloadCount(){
-    try {
-        const resp = await axios(`${DOMAIN}/api/${API_VERSION}/fragments/files/download?fragmentId=${fragmentdetails.fragment_id}`,{
-          withCredentials: true,
-        })
-        console.log(resp);
-        if(fragmentdetails.url && fragmentdetails.file_name)downloadFile(fragmentdetails?.url, fragmentdetails?.file_name,AlertFunction);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const { status, response, message } = error;
 
-        if (status == 500) {
-          // setUserLogin(true)
-          AlertFunction(
-            true,
-            errorRed,
-            "Something went wrong ! please try again",
-            2000
-          );
-          return;
-        } else if (message == "Network Error") {
-          AlertFunction(true, errorRed, "No Internet", 2000);
-          return;
-        }
-        AlertFunction(true, errorRed, response?.data?.message, 1000);
-      }
-    }
-  }
-  function formatFileSize(sizeInMB: number | null): string {
-    if (!sizeInMB) return '0 Bytes';
-    
-    if (sizeInMB >= 1) {
-      return `${sizeInMB.toFixed(2)} MB`;
-    } else if (sizeInMB >= 0.001) {
-      return `${(sizeInMB * 1024).toFixed(2)} KB`;
-    } else {
-      return `${(sizeInMB * 1024 * 1024).toFixed(0)} Bytes`;
-    }
-  }
-  
-
-    function handleDownload(){
-
-    // Example logic to handle different types
-    if (fragmentdetails?.url && fragmentdetails?.url.startsWith('http')) {
-      // Download remote file (image, video, PDF, etc.)
-      checkDownloadCount()
-    } else {
-      // Download generated text or blob
-      const textContent = fragmentdetails.text_content;
-      if(textContent) downloadFile(textContent, 'fragment.txt',AlertFunction);
-    }
-};
   return (
-   <div className={`absolute z-20 shadow-sm border -left-[0px] w-42 h-auto text-sm p-2 rounded-lg bg-white ${!indexState || indexState == 1 ? '-top-28':'top-1'}`}>
-    <div className="m-1">Size : {formatFileSize(fragmentdetails.size)}</div>
+   <div className={`absolute z-20 shadow-sm border -left-[0px] w-42 h-auto text-sm p-2 rounded-lg bg-white ${!indexState || indexState == 1 ? '-top-20':'top-0'}`}>
+    {/* <div className="m-1">Size : {calFragmentSize(fragmentdetails.size)}</div> */}
+    <div className="m-1"> {fragmentdetails.fragment_type !== 'text'? 'File Name : ' +fragmentdetails.file_name :''}</div>
     <div className="m-1">Created : {new Date(fragmentdetails.created_at).toLocaleTimeString() +' '+ new Date(fragmentdetails.created_at).toDateString()}</div>
-    <button className="m-1" onClick={handleDownload}> Download</button>
+    {/* <button className="m-1" onClick={handleDownload}> Download</button> */}
     <div className="m-1">{fragmentdetails.updated_at && fragmentdetails.fragment_type == 'text' ? 'Modified :' + new Date(fragmentdetails.updated_at).toLocaleTimeString() + ' ' + new Date(fragmentdetails.updated_at).toDateString():''}</div>
    <button className="bg-red-500 p-[5px] rounded-sm" onClick={deleteFragment}>{isDelete ? 'Deleting':'Delete'}</button>
    </div>

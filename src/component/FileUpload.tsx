@@ -4,6 +4,7 @@ import { API_VERSION, DOMAIN, errorRed, successGreen } from "../utils/Constant";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { activeCapsule, fragmentStore, screenShot, selectedFragmentCountToUpload, uploadedFragmentCount } from "../recoil/Store";
 import useAlertFunction from "../hooks/AlertFunction";
+import { extension } from 'mime-types';
 import icons from "../utils/Icons";
 interface FragmentResponse {
   fragment_id: string;
@@ -58,17 +59,15 @@ export default function FileUpload() {
       files.map(async (file) => {
         const base64Url = await createBase64(file);
         const { name, type } = file;
-        let fileType = type.split("/")[0];
-        if (fileType === "image") fileType = "image";
-        else if (fileType === "video") fileType = "video";
-        else fileType = type;
+        
+        const fileType =  extension(type) 
 
         const tempId = `temp-${Date.now()}-${name}`;
         return {
           fragment_id: tempId,
           capsule_id: activeCapsuleValue,
           size: null,
-          fragment_type: fileType,
+          fragment_type: fileType ? fileType : type,
           tag: "",
           reminder: false,
           download_count: 0,
@@ -166,10 +165,11 @@ export default function FileUpload() {
   async function saveInDb(files: File[], tempIds: string[]) {
     const fileObjects = files.map((file) => {
       const { name, size, type } = file;
-      let fileType = type.split("/")[0];
-      if (fileType === "image") fileType = "image";
-      else if (fileType === "video") fileType = "video";
-      else fileType = type;
+      const fileType =  extension(type) 
+      // let fileType = type.split("/")[0];
+      // if (fileType === "image") fileType = "image";
+      // else if (fileType === "video") fileType = "video";
+      // else fileType = type;
 
       return {
         capsuleId: activeCapsuleValue,
