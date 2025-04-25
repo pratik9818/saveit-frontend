@@ -28,21 +28,41 @@ export default function FragmentsList() {
   const clientWidth = document.body.clientWidth;
   const setUserLogin = useSetRecoilState(userLogin)
   const setSelectedFragment = useSetRecoilState(selectedFragment);
+  const currentRequestId = useRef<string>("");
+  const abortController = useRef<AbortController | null>(null);
   
   useEffect(() => {
     setSelectedFragment([])
 
     setIsLoading(true)
+    
+    // Cancel any ongoing request
+    if (abortController.current) {
+      abortController.current.abort();
+    }
+    
+    // Create new abort controller for this request
+    abortController.current = new AbortController();
+    const newRequestId = Date.now().toString();
+    currentRequestId.current = newRequestId;
+
     if (isFragmentSearchState) {
       setFragmentStore([]);
       const endPoint = `${DOMAIN}/api/${API_VERSION}/fragments/search?searchValue=${fragmentSearchValues}&capsuleId=${activeCapsuleValue}`;
-      getFragments(endPoint);
+      getFragments(endPoint, newRequestId, abortController.current.signal);
       return;
     }
     setFragmentStore([]);
     const dateCreated = new Date().toUTCString();
     const endPoint = `${DOMAIN}/api/${API_VERSION}/fragments?createdAt=${dateCreated}&capsuleId=${activeCapsuleValue}`;
-    getFragments(endPoint);
+    getFragments(endPoint, newRequestId, abortController.current.signal);
+
+    // Cleanup function
+    return () => {
+      if (abortController.current) {
+        abortController.current.abort();
+      }
+    };
   }, [fragmentSearchValues,activeCapsuleValue]);
 
   useEffect(() => {
@@ -52,27 +72,42 @@ export default function FragmentsList() {
         fragmentStoreState[fragmentStoreState.length - 1];
       const dateCreated = lastFetchFragment.created_at;
       const endPoint = `${DOMAIN}/api/${API_VERSION}/fragments?createdAt=${dateCreated}&capsuleId=${activeCapsuleValue}`;
-      getFragments(endPoint);
+      
+      // Create new abort controller for this request
+      if (abortController.current) {
+        abortController.current.abort();
+      }
+      abortController.current = new AbortController();
+      const newRequestId = Date.now().toString();
+      currentRequestId.current = newRequestId;
+      
+      getFragments(endPoint, newRequestId, abortController.current.signal);
     }
   }, [isTriggerFetch]);
   
 
-  async function getFragments(url: string) {
+  async function getFragments(url: string, requestId: string, signal: AbortSignal) {
     try {
       const {
         data: { data},
         status,
       } = await axios.get(url, {
         withCredentials: true,
+        signal
       });
       // console.log(data);
-      if (status === 200) {
+      if (status === 200 && requestId === currentRequestId.current) {
         setFragmentStore((prv) => [...prv, ...data]);
         setTriggerFetch(false);
         setIsLoading(false)
         setUserLogin(true)
       }
     } catch (error) {
+      // Ignore aborted request errors
+      if (axios.isAxiosError(error) && error.name === 'CanceledError') {
+        return;
+      }
+
       setTriggerFetch(false);
       setIsLoading(false)
       if (axios.isAxiosError(error)) {

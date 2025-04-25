@@ -4,6 +4,7 @@ import FragmentAboutModal from "./FragmentAboutModal";
 import axios from "axios";
 import {
   API_VERSION,
+  audioExtensions,
   DOMAIN,
   errorRed,
   imageExtensions,
@@ -116,12 +117,14 @@ export default function FragmentAction({
     setActiveEditFragmentTextId(fragmentdetails.fragment_id);
     setIsEditTextModalOpen(true);
   }
-  function checkImage$videoMedia() {
+  function checkImage_video_audioMedia() {
     if (
       imageExtensions.includes(fragmentdetails.fragment_type) ||
       videoExtensions.includes(fragmentdetails.fragment_type) ||
+      audioExtensions.includes(fragmentdetails.fragment_type) ||
       fragmentdetails.fragment_type === "image" ||
-      fragmentdetails.fragment_type === "video"
+      fragmentdetails.fragment_type === "video" ||
+      fragmentdetails.fragment_type === "audio"
     ) {
       const fileDetails = {
         fragment_id: fragmentdetails.fragment_id,
@@ -131,7 +134,7 @@ export default function FragmentAction({
       return (
         <div className="flex items-center justify-between w-[100%]">
           <div onClick={() => handleDownload(fileDetails)}>
-            <icons.DownloadIcon />
+            <icons.DownloadIcon width="20px" height="20px"/>
           </div>
           <div className="flex items-center mt-1 text-sm text-gray-600">
             <span>{calFragmentSize(fragmentdetails.size)}</span>
@@ -147,7 +150,7 @@ export default function FragmentAction({
       };
       return (
         <div onClick={() => handleDownload(fileDetails)}>
-          <icons.DownloadIcon />
+          <icons.DownloadIcon width="20px" height="20px"/>
         </div>
       );
     }
@@ -181,7 +184,7 @@ export default function FragmentAction({
       {hideFragmentAbout && (
         <FragmentAboutModal fragmentdetails={fragmentdetails} />
       )}
-      {checkImage$videoMedia()}
+      {checkImage_video_audioMedia()}
 
       {fragmentdetails.fragment_type === "text" && (
         <CopyText textToCopy={fragmentdetails.text_content} />

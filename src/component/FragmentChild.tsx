@@ -137,7 +137,17 @@ const FragmentChild = memo(({ fragmentdetails, clientwidth }: FragmentChildProps
   const [selectedFragmentValue, setSelectedFragment] = useRecoilState(selectedFragment);
   const { dimension, fragmentMargin } = useFragmentDimensions(clientwidth, fragmentdetails.fragment_type);
   const { handleDownload } = useDownloadFile();
-  
+  function docsIcon(type:string){
+    if(type === "pdf"){
+      return <icons.PdfIcon />
+    }else if(type === "csv"){
+      return <icons.CsvIcon />
+    }else if(type === "xlsx" || type === "xls"){
+      return <icons.ExcelIcon />
+    }else if(type === "zip"){
+      return <icons.ZipIcon />
+    }else return <icons.FileIcon />
+  }
   const fragmentElement = useMemo(() => {
     const handleClick = (e: React.MouseEvent) => {
       e.stopPropagation();
@@ -170,7 +180,7 @@ const FragmentChild = memo(({ fragmentdetails, clientwidth }: FragmentChildProps
         <div className="relative">
           <img
             onClick={handleClick}
-            className="w-[100%] h-[100%] object-cover max-h-[350px]"
+            className="w-[100%] h-[100%] object-scale-down max-h-[350px]"
             src={fragmentdetails?.url || ""}
             alt={fragmentdetails?.file_name || "Fragment image"}
             onError={(e) => {
@@ -183,24 +193,31 @@ const FragmentChild = memo(({ fragmentdetails, clientwidth }: FragmentChildProps
               e.stopPropagation();
               setShowFullImage(true);
             }}
-            className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all"
+            className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all flex items-center justify-center"
           >
-            <FontAwesomeIcon icon={faExpand} className="w-4 h-4" />
+            <FontAwesomeIcon icon={faExpand} className="w-3.5 h-3.5" />
           </button>
         </div>
       );
     } else if (audioExtensions.includes(fileType) || fileType === "audio") {
+      
       return (
+        <div onClick={handleClick} className="flex items-center p-4  rounded-lg hover:bg-emerald-800/30 transition-all align-middle">
+       <icons.AudioIcon />
+        <div className="flex flex-col flex-1 ml-4">
         <audio
           onClick={handleClick}
           controls
-          className="w-[100%]"
+          className="w-[100%] bg-gray-100 rounded-lg p-2"
           src={fragmentdetails?.url || ""}
           onError={(e) => {
             e.currentTarget.onerror = null;
             console.error("Error loading audio");
           }}
         />
+        </div>
+      </div>
+       
       );
     } else {
       const fileDetails = {
@@ -211,7 +228,7 @@ const FragmentChild = memo(({ fragmentdetails, clientwidth }: FragmentChildProps
       return (
         <div onClick={handleClick} className="flex items-center p-4  rounded-lg hover:bg-emerald-800/30 transition-all">
           <div className="text-red-500">
-            <icons.FileIcon />
+         { docsIcon(fragmentdetails.fragment_type)}
           </div>
           <div className="flex flex-col flex-1 ml-4">
             <span className="text-base font-medium text-gray-800">{fragmentdetails.file_name?.substring(0, 150)}</span>
@@ -222,7 +239,7 @@ const FragmentChild = memo(({ fragmentdetails, clientwidth }: FragmentChildProps
             </div>
           </div>
           <div className="text-gray-600 hover:text-gray-800 transition-colors">
-            <div onClick={() => handleDownload(fileDetails)}><icons.DownloadIcon/></div>
+            <div onClick={() => handleDownload(fileDetails)}><icons.DownloadIcon width="35px" height="30px"/></div>
           </div>
         </div>
       );
@@ -273,20 +290,19 @@ const FragmentChild = memo(({ fragmentdetails, clientwidth }: FragmentChildProps
       </div>
 
       {showFullImage && (
-        <div 
-          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4" 
-          onClick={() => setShowFullImage(false)}
-        >
-          <div className="relative max-w-[90vw] max-h-[90vh]">
+        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4" 
+        onClick={() => setShowFullImage(false)}
+      >
+          <div className="relative w-fit mx-auto">
             <img
               src={fragmentdetails?.url || ""}
               alt={fragmentdetails?.file_name || "Fragment image"}
-              className="max-w-full max-h-[90vh] object-contain"
+              className="max-w-[90vw] max-h-[90vh] object-contain"
               onClick={(e) => e.stopPropagation()}
             />
             <button
               onClick={() => setShowFullImage(false)}
-              className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all"
+              className="absolute -top-10 -right-10 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all"
             >
               <FontAwesomeIcon icon={faXmark} className="w-4 h-4" />
             </button>

@@ -145,9 +145,14 @@ export default function CapsulesList() {
     e: React.MouseEvent<HTMLDivElement>
   ) {
     e.stopPropagation();
-    setFragmentStore([])
-    setActiveCapsule(capsuleid);
-
+    setFragmentStore([]);
+    // Force a re-fetch even if clicking the same capsule by first clearing it
+    if (activeCapsuleValue === capsuleid) {
+      setActiveCapsule("");
+      setTimeout(() => setActiveCapsule(capsuleid), 0);
+    } else {
+      setActiveCapsule(capsuleid);
+    }
   }
   return (
     <div
@@ -159,13 +164,6 @@ export default function CapsulesList() {
         <Loader width={40} height={40} top={"50vh"} left={"50%"} />
       ) : capsulesState.length ? (
         capsulesState.map((element, index) => {
-          // const formatDateTime = (date: string | Date | null) => {
-          //   if (!date) return "";
-          //   const dateObj = date instanceof Date ? date : new Date(date);
-          //   return `${dateObj.toDateString()} ${
-          //     dateObj.toLocaleTimeString()
-          //   }`;
-          // };
           return (
             <div
               key={element.capsule_id}

@@ -27,7 +27,7 @@ export const imageExtensions = [
   "image"
 ];
 export const videoExtensions = ["mp4", "webm", "mov", "avi", "mkv", "video"];
-export const audioExtensions = ["mp3", "wav", "ogg", "aac", "m4a"];
+export const audioExtensions = ["mp3", "wav", "ogg", "aac", "m4a", "audio","mpga"];
 
 export const fragmentDimensionAbove700px = [
   {
@@ -46,10 +46,15 @@ export const fragmentDimensionAbove700px = [
     height: "auto",
   },
   {
+    fragmentType: audioExtensions,
+    width: "400px",
+    height: "95px",
+  },
+  {
     fragmentType: "docs",
     width: "300px",
     height: "85px",
-  },
+  }
 ];
 export const fragmentDimensionBelow700px = [
   {

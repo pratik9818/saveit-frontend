@@ -11,8 +11,13 @@ const icons = {
   LogoIcon:()=> <img onClick={() => location.reload()} className="w-[70px] h-[35px] md:w-[80px] md:h-[35px] mr-4 cursor-pointer" src="/assets/logo.png" alt="Saveit.tech" />,
   backIcon:()=> <img className="w-[33px] h-[30px] cursor-pointer mt-1" src="/assets/backicon.png" alt="back" />,
   newCapsuleIcon:()=> <img className="w-[25px] h-[25px] mr-1" src="/assets/newcapsuleicon.png" alt="add" />,
+  DownloadIcon:({width , height}:{width:string, height:string})=> <img className={`w-[${width}] h-[${height}] mx-2 mt-1 cursor-pointer`} src="/assets/downloadicon.png" alt="download" />,
   capsuleListVisbilityIcon:()=> <img className="w-[30px] h-[30px] cursor-pointer" src="/assets/sidenavicon.png" alt="side nav" />,
-  DownloadIcon:()=> <img className="w-[25px] h-[25px] cursor-pointer" src="/assets/downloadicon.png" alt="side nav" />,
+  PdfIcon:()=> <img className="w-[30px] h-[30px]" src="/assets/pdficon.png" alt="pdf" />,
+  CsvIcon:()=> <img className="w-[30px] h-[30px]" src="/assets/csvicon.png" alt="csv" />,
+  ExcelIcon:()=> <img className="w-[30px] h-[30px] " src="/assets/excelicon.png" alt="excel" />,
+  AudioIcon:()=> <img className="w-[25px] h-[25px]" src="/assets/audioicon.png" alt="audio" />,
+  ZipIcon:()=> <img className="w-[30px] h-[30px]" src="/assets/zipicon.png" alt="zip" />,
 };
 
 export default icons;
