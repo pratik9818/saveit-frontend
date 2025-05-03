@@ -15,6 +15,8 @@ export default function CapsuleDelete() {
   const [loading, setLoading] = useState(false);
 
   async function deletecapsule() {
+    const confirmed = window.confirm("Are you sure you want to delete this?");
+    if(!confirmed)return
     setLoading(true);
     try {
       const res = await axios.delete(`${DOMAIN}/api/${API_VERSION}/capsules`, {

@@ -52,17 +52,18 @@ const useFragmentDimensions = (
   return fragmentDimension;
 };
 
-const getFragmentColor = (fragmentType: string): string => {
-  switch (fragmentType) {
-    case "text":
-      return "bg-emerald-800/20 px-4 py-2";
-    case "video":
-    case "image":
-      return "bg-gray-200";
-    default:
-      return "bg-emerald-800/20";
+const fragmentDynamicStyle = (fragmentType: string): string => {
+  if (fragmentType === "text") {
+    return "bg-blue-100 bg-opacity-70 px-4 py-2 border border-blue-200";
+  } else if (videoExtensions.includes(fragmentType)) {
+    return "bg-gray-100 border border-gray-200";
+  } else if (imageExtensions.includes(fragmentType)) {
+    return "bg-gray-100 border border-gray-200";
+  } else {
+    return "bg-emerald-800/20 border border-emerald-800 border-opacity-20";
   }
 };
+
 
 const isValidUrl = (text: string): boolean => {
   try {
@@ -226,7 +227,7 @@ const FragmentChild = memo(({ fragmentdetails, clientwidth }: FragmentChildProps
         file_name: fragmentdetails.file_name || undefined
       };
       return (
-        <div onClick={handleClick} className="flex items-center p-4  rounded-lg hover:bg-emerald-800/30 transition-all">
+        <div onClick={handleClick} className="flex items-center p-4 hover:bg-emerald-800/30 transition-all">
           <div className="text-red-500">
          { docsIcon(fragmentdetails.fragment_type)}
           </div>
@@ -271,10 +272,9 @@ const FragmentChild = memo(({ fragmentdetails, clientwidth }: FragmentChildProps
           selectedFragmentValue.includes(fragmentdetails)
             ? "shadow-[0_0_15px_rgba(251,44,133,0.9)]"
             : "shadow-sm"
-        } ${getFragmentColor(fragmentdetails.fragment_type)}`}
+        } ${fragmentDynamicStyle(fragmentdetails.fragment_type)}`}
         style={{ 
           minWidth: dimension.width, 
-          minHeight: dimension.height 
         }}
         onMouseEnter={showAction}
         onMouseLeave={hideAction}
@@ -302,7 +302,7 @@ const FragmentChild = memo(({ fragmentdetails, clientwidth }: FragmentChildProps
             />
             <button
               onClick={() => setShowFullImage(false)}
-              className="absolute -top-10 -right-10 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all"
+              className="absolute -top-8 -right-6 bg-white/50 hover:bg-white/70 text-white p-2 rounded-full transition-all flex items-center justify-center"
             >
               <FontAwesomeIcon icon={faXmark} className="w-4 h-4" />
             </button>

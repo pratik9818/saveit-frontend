@@ -7,11 +7,8 @@ export default function CapsuleLayoutVisbilityBtn() {
     const activeCapsuleValue = useRecoilValue(activeCapsule)
     function hideandshow(){
       if(!activeCapsuleValue)return
-        if(capsuleLayoutVisible){
-            setCapsuleLayoutVisible(false)
-        }else{
-            setCapsuleLayoutVisible(true)
-        }
+        if(capsuleLayoutVisible) setCapsuleLayoutVisible(false)
+          else  setCapsuleLayoutVisible(true)
     }
   return (
     <div onClick={hideandshow}>

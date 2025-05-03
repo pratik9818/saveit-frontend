@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { API_VERSION, DOMAIN, errorRed } from "../utils/Constant";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
@@ -16,7 +16,7 @@ import CapsuleActionModal from "../component/CapsuleActionModal";
 import useAlertFunction from "../hooks/AlertFunction";
 import Loader from "../component/Loader";
 
-export default function CapsulesList() {
+const CapsulesList = ()=>{
   const [activeCapsuleValue, setActiveCapsule] = useRecoilState(activeCapsule);
   const AlertFunction = useAlertFunction();
   const [capsulesState, setCapsulesState] = useRecoilState(capsulesStore);
@@ -199,3 +199,4 @@ export default function CapsulesList() {
     </div>
   );
 }
+export default memo(CapsulesList);
